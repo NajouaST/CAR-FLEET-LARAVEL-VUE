@@ -1,0 +1,16 @@
+
+# Laravel backend
+/fleetback/vendor
+/fleetback/node_modules
+/fleetback/storage/*.key
+/fleetback/.env
+
+# Vue frontend
+/fleetfront/node_modules
+/fleetfront/dist
+/fleetfront/.env
+
+# Logs & system files
+*.log
+.DS_Store
+Thumbs.db
