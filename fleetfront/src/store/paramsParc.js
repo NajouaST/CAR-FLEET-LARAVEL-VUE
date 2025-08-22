@@ -27,6 +27,24 @@ export const useParamsParcStore = defineStore('paramsParcStore', {
             }
         },
 
+        async getMarquesNames(params = {},toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+
+                const res = await axiosInstance.get('/marques-names', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                    params: queryParams
+                });
+
+                return res.data;
+            } catch (err) {
+                toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load marques', life: 3000 });
+                this.handleAuthorizationError(err,toast);
+            }
+        },
+
         async createMarques(formData, toast) {
             try {
                  const res = await axiosInstance.post('/marques', formData, {
@@ -99,6 +117,24 @@ export const useParamsParcStore = defineStore('paramsParcStore', {
                 const queryParams = this.buildUserApiQuery(params);
 
                 const res = await axiosInstance.get('/modeles', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                    params: queryParams
+                });
+
+                return res.data;
+            } catch (err) {
+                toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load modeles', life: 3000 });
+                this.handleAuthorizationError(err,toast);
+            }
+        },
+
+        async getModelesName(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+
+                const res = await axiosInstance.get('/modeles-names', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     },

@@ -15,9 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string('name');
 
-            $table->decimal('CO2')->nullable();
-            $table->decimal('Cylindre')->nullable();
-            $table->decimal('Poids')->nullable();
+            $table->decimal('puissance_cv')->nullable();
+            $table->decimal('puissance_din')->nullable();
+
+            $table->integer('places')->nullable();
+
+            $table->decimal('poids_vide')->nullable();
+            $table->decimal('poids_tc')->nullable();
+            $table->decimal('charge_utile')->nullable();
+
+            $table->decimal('cylindre')->nullable();
+
+            $table->decimal('consommation_min')->nullable();
+            $table->decimal('consommation_max')->nullable();
+            $table->decimal('consommation_moy')->nullable();
 
             $table->foreignId('marque_id')->constrained()->cascadeOnDelete();
             $table->foreignId('gamme_id')->constrained()->cascadeOnDelete();

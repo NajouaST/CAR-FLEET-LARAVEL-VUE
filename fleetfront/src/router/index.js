@@ -27,12 +27,11 @@ const router = createRouter({
                         {
                             path: 'user',
                             meta: { permission: "users access" },
-                            component: () => import('@/views/pages/admin/users/ViewUser.vue'),
                             children: [
                                 {
                                     path: '',
                                     name: 'users',
-                                    meta: { permission: "users access" },
+                                    meta: { permission: "users view" },
                                     component: () => import('@/views/pages/admin/users/ListUser.vue'),
                                 },
                                 {
@@ -58,7 +57,6 @@ const router = createRouter({
                         {
                             path: 'role',
                             meta: { permission: "roles access" },
-                            component: () => import('@/views/pages/admin/roles/ViewRole.vue'),
                             children: [
                                 {
                                     path: '',
@@ -111,6 +109,36 @@ const router = createRouter({
                                 },
                             ]
                         },
+                        {
+                            path: 'vehicule',
+                            meta: { permission: "vehicules access" },
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'vehicules',
+                                    meta: { permission: "vehicules view" },
+                                    component: () => import('@/views/pages/parc/vehicule/ViewVehicule.vue'),
+                                },
+                                {
+                                    path: 'create',
+                                    name: 'createVehicule',
+                                    meta: { permission: "vehicules create" },
+                                    component: () => import('@/views/pages/parc/vehicule/CreateVehicule.vue'),
+                                },
+                                {
+                                    path: 'edit/:id',
+                                    name: 'editVehicule',
+                                    meta: { permission: "vehicules edit" },
+                                    component: () => import('@/views/pages/parc/vehicule/EditVehicule.vue'),
+                                },
+                                {
+                                    path: 'show/:id',
+                                    name: 'showVehicule',
+                                    meta: { permission: "vehicules view" },
+                                    component: () => import('@/views/pages/parc/vehicule/ShowVehicule.vue'),
+                                },
+                            ]
+                        },
                     ]
                 },
                 {
@@ -125,6 +153,16 @@ const router = createRouter({
                             path: 'type-compteur',
                             meta: { permission: "params access" },
                             component: () => import('@/views/pages/params/ViewTypeCompteur.vue'),
+                        },
+                        {
+                            path: 'famille-vehicule',
+                            meta: { permission: "params access" },
+                            component: () => import('@/views/pages/params/ViewFamilleVehicule.vue'),
+                        },
+                        {
+                            path: 'fournisseur',
+                            meta: { permission: "params access" },
+                            component: () => import('@/views/pages/params/ViewFournissuer.vue'),
                         },
                     ]
                 },

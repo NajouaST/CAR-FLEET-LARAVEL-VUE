@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\params\FamilleVehiculeController;
+use App\Http\Controllers\API\params\FournisseurController;
 use App\Http\Controllers\API\params\TypeCarburantController;
 use App\Http\Controllers\API\params\TypeCompteurController;
 use App\Http\Controllers\API\parc\GammeController;
 use App\Http\Controllers\API\parc\MarqueController;
 use App\Http\Controllers\API\parc\ModeleController;
+use App\Http\Controllers\API\parc\VehiculeController;
 use App\Http\Controllers\API\user\PermissionController;
 use App\Http\Controllers\API\user\RoleController;
 use App\Http\Controllers\API\user\UserController;
@@ -76,6 +79,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**********************************     GAMME      ************************************/
     Route::apiResource('gammes', GammeController::class)->middleware(PermissionMiddleware::using('params access'));
     Route::get('gammes-names', [GammeController::class, 'listNames']);
+
+    /**********************************     VEHICULE      ************************************/
+    Route::apiResource('vehicules', VehiculeController::class)->middleware(PermissionMiddleware::using('vehicules access'));
+    Route::get('vehicules-names', [VehiculeController::class, 'listImmatriculations']);
 });
 
 /**********************************     PARAM GENEREAUX      ************************************/
@@ -88,4 +95,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**********************************     CARBURANT      ************************************/
     Route::apiResource('type-carburants', TypeCarburantController::class)->middleware(PermissionMiddleware::using('params access'));
     Route::get('type-carburants-names', [TypeCarburantController::class, 'listNames']);
+
+    /**********************************     FAMILLE VEH      ************************************/
+    Route::apiResource('famille-vehicules', FamilleVehiculeController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('famille-vehicules-names', [FamilleVehiculeController::class, 'listNames']);
+
+    /**********************************     FOURNISSEUR    ************************************/
+    Route::apiResource('fournisseurs', FournisseurController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('fournisseurs-names', [FournisseurController::class, 'listNames']);
 });

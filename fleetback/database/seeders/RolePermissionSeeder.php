@@ -23,12 +23,9 @@ class RolePermissionSeeder extends Seeder
         // ---------- USERS ----------
         Permission::create(['name' => 'users access']);
         Permission::create(['name' => 'users view (all)']);
-        Permission::create(['name' => 'users view (own)']);
         Permission::create(['name' => 'users create']);
         Permission::create(['name' => 'users edit (all)']);
-        Permission::create(['name' => 'users edit (own)']);
         Permission::create(['name' => 'users delete (all)']);
-        Permission::create(['name' => 'users delete (own)']);
 
         // ---------- ROLES ----------
         Permission::create(['name' => 'roles access']);
@@ -37,7 +34,17 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'roles edit (all)']);
         Permission::create(['name' => 'roles delete (all)']);
 
-        // ---------- MARQUES ----------
+        // ---------- VEHICULES ----------
+        Permission::create(['name' => 'vehicules access']);
+        Permission::create(['name' => 'vehicules view (all)']);
+        Permission::create(['name' => 'vehicules view (own)']);
+        Permission::create(['name' => 'vehicules create']);
+        Permission::create(['name' => 'vehicules edit (all)']);
+        Permission::create(['name' => 'vehicules edit (own)']);
+        Permission::create(['name' => 'vehicules delete (all)']);
+        Permission::create(['name' => 'vehicules delete (own)']);
+
+        // ---------- PARAMS ----------
         Permission::create(['name' => 'params access']);
 
         // Create roles
@@ -57,20 +64,6 @@ class RolePermissionSeeder extends Seeder
 
         // Assign admin role
         $adminUser->assignRole('admin');
-
-        TypeCarburant::create([ 'name' => 'Diesel']);
-        TypeCarburant::create([ 'name' => 'SSP']);
-        TypeCarburant::create([ 'name' => 'Gazole']);
-
-        TypeCompteur::create([ 'name' => 'KM']);
-
-        Gamme::create([ 'name' => 'SUV']);
-        Gamme::create([ 'name' => 'Sedan']);
-        Gamme::create([ 'name' => 'Hybrid']);
-
-        Marque::create([ 'name' => 'BMW']);
-        Marque::create([ 'name' => 'KIA']);
-        Marque::create([ 'name' => 'FORD']);
     }
 }
 

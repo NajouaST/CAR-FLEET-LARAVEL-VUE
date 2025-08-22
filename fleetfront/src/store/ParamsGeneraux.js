@@ -165,6 +165,200 @@ export const useParamsGenereauxStore = defineStore("paramsGenereauxStore", {
             }
         },
 
+        // ---------- TYPE CARBURANTS ----------
+        async getFamilleVehicules(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+
+                const res = await axiosInstance.get("/famille-vehicules", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    params: queryParams,
+                });
+
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load familles vehicule", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getFamilleVehiculesName(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+
+                const res = await axiosInstance.get("/famille-vehicules-names", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    params: queryParams,
+                });
+
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load fournisseurs", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async createFamilleVehicule(formData, toast) {
+            try {
+                const res = await axiosInstance.post("/famille-vehicules", formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                if (err.response?.status === 422) {
+                    this.errors = err.response.data.errors;
+                }
+                this.handleAuthorizationError(err, toast);
+                throw err;
+            }
+        },
+
+        async updateFamilleVehicule(id, formData, toast) {
+            try {
+                const res = await axiosInstance.put(`/famille-vehicules/${id}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getFamilleVehiculeById(id, toast) {
+            try {
+                const res = await axiosInstance.get(`/famille-vehicules/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load famille vehicule", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async deleteFamilleVehicule(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/famille-vehicules/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete famille vehicule", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        // ---------- TYPE CARBURANTS ----------
+        async getFournisseurs(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+
+                const res = await axiosInstance.get("/fournisseurs", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    params: queryParams,
+                });
+
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load fournisseurs", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getFournisseurName(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+
+                const res = await axiosInstance.get("/fournisseurs-names", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    params: queryParams,
+                });
+
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load fournisseurs", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async createFournisseur(formData, toast) {
+            try {
+                const res = await axiosInstance.post("/fournisseurs", formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                if (err.response?.status === 422) {
+                    this.errors = err.response.data.errors;
+                }
+                this.handleAuthorizationError(err, toast);
+                throw err;
+            }
+        },
+
+        async updateFournisseur(id, formData, toast) {
+            try {
+                const res = await axiosInstance.put(`/fournisseurs/${id}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getFournisseurById(id, toast) {
+            try {
+                const res = await axiosInstance.get(`/fournisseurs/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load fournisseur", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async deleteFournisseur(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/fournisseurs/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete fournisseur", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
         // ---------- UTILITIES ----------
         handleAuthorizationError(error, toast) {
             const message = error?.response?.data?.message;

@@ -3,15 +3,17 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 trait HasQueryFilters
 {
     public function applyQueryParameters($query, Request $request)
     {
+        $table = $query->getModel()->getTable(); // dynamically detect table (e.g., "modeles")
+
         // 1. Filtering
         foreach ($request->all() as $key => $value) {
             if (strpos($key, '__') !== false) {
-
                 $parts = explode('__', $key);
 
                 if (count($parts) === 2) {
@@ -31,14 +33,29 @@ trait HasQueryFilters
         // 2. Sorting
         $sortField = $request->input('sortField');
         $sortOrder = $request->input('sortOrder', 1);
+
         if ($sortField) {
-            // support relation sort like "marque.name"
             if (strpos($sortField, '.') !== false) {
+                // Example: marque.name
                 [$relation, $field] = explode('.', $sortField);
-                $query->join($relation . 's', $relation . 's.id', '=', 'modeles.' . $relation . '_id')
-                    ->orderBy($relation . 's.' . $field, $sortOrder == 1 ? 'asc' : 'desc');
+
+                $relationModel = $query->getModel()->$relation()->getRelated(); // get relation model
+                $relationTable = $relationModel->getTable();
+                $foreignKey = $query->getModel()->$relation()->getQualifiedForeignKeyName(); // e.g. modeles.marque_id
+                $ownerKey = $relationModel->getKeyName(); // usually "id"
+
+                // Apply subquery sort (no join needed, avoids select collision)
+                $query->orderBy(
+                    DB::table($relationTable)
+                        ->select($field)
+                        ->whereColumn($relationTable.'.'.$ownerKey, $foreignKey)
+                        ->limit(1),
+                    $sortOrder == 1 ? 'asc' : 'desc'
+                );
+
             } else {
-                $query->orderBy($sortField, $sortOrder == 1 ? 'asc' : 'desc');
+                // Normal column on main table
+                $query->orderBy($table.'.'.$sortField, $sortOrder == 1 ? 'asc' : 'desc');
             }
         }
 
@@ -71,18 +88,14 @@ trait HasQueryFilters
                 $query->where($field, 'like', "%{$value}");
                 break;
             case 'equals':
-                if (is_array($value)) {
-                    $query->whereIn($field, $value);
-                } else {
-                    $query->where($field, $value);
-                }
+                is_array($value)
+                    ? $query->whereIn($field, $value)
+                    : $query->where($field, $value);
                 break;
             case 'notEquals':
-                if (is_array($value)) {
-                    $query->whereNotIn($field, $value);
-                } else {
-                    $query->where($field, '!=', $value);
-                }
+                is_array($value)
+                    ? $query->whereNotIn($field, $value)
+                    : $query->where($field, '!=', $value);
                 break;
             case 'in':
                 $query->whereIn($field, (array) $value);

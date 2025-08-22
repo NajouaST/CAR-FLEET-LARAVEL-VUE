@@ -60,6 +60,12 @@ const model = ref([
                     },
                 ]
             },
+            {
+                label: 'Vehicule',
+                icon: 'pi pi-fw pi-users',
+                permission: "vehicules access",
+                to: '/parc/vehicule'
+            },
         ]
     },
     {
@@ -75,6 +81,16 @@ const model = ref([
                 label: 'Type Carburant',
                 icon: 'pi pi-fw pi-users',
                 to: '/params/type-carburant'
+            },
+            {
+                label: 'Famille vehicule',
+                icon: 'pi pi-fw pi-users',
+                to: '/params/famille-vehicule'
+            },
+            {
+                label: 'Fournisseur',
+                icon: 'pi pi-fw pi-users',
+                to: '/params/fournisseur'
             },
         ]
     },

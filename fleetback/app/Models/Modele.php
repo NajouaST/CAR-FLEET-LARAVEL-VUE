@@ -11,16 +11,35 @@ class Modele extends Model
 
     protected $fillable = [
         'name',
-        'CO2',
-        'Cylindre',
-        'Poids',
+        'puissance_cv',
+        'puissance_din',
+        'places',
+        'poids_vide',
+        'poids_tc',
+        'charge_utile',
+        'cylindre',
+        'consommation_min',
+        'consommation_max',
+        'consommation_moy',
         'marque_id',
         'gamme_id',
         'type_compteur_id',
         'type_carburant_id',
     ];
 
-    // Relationships
+    protected $casts = [
+        'puissance_cv' => 'decimal:2',
+        'puissance_din' => 'decimal:2',
+        'poids_vide' => 'decimal:2',
+        'poids_tc' => 'decimal:2',
+        'charge_utile' => 'decimal:2',
+        'cylindre' => 'decimal:2',
+        'consommation_min' => 'decimal:2',
+        'consommation_max' => 'decimal:2',
+        'consommation_moy' => 'decimal:2',
+    ];
+
+    // Relations
     public function marque()
     {
         return $this->belongsTo(Marque::class);
