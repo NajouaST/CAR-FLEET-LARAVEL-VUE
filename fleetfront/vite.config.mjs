@@ -27,9 +27,13 @@ export default defineConfig({
                 target: "http://localhost:8000",
                 changeOrigin: true,
                 headers:{
-                    Accept: "aplication/json",
-                    "Content-Type": "aplication/json",
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
                 }
+            },
+            '/sanctum': {
+                target: "http://localhost:8000",
+                changeOrigin: true,
             }
         }
     }

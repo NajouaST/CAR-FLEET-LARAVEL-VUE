@@ -164,6 +164,187 @@ export const useParamsGenereauxStore = defineStore("paramsGenereauxStore", {
                 this.handleAuthorizationError(err, toast);
             }
         },
+        // ---------- PERSONNELS ----------
+        async getPersonnels(params = {}, toast) {
+			try {
+				const queryParams = this.buildUserApiQuery(params);
+				const res = await axiosInstance.get("/personnels", {
+					headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+					params: queryParams,
+				});
+				return res.data;
+			} catch (err) {
+				toast?.add({ severity: "error", summary: "Error", detail: "Failed to load personnels", life: 3000 });
+				this.handleAuthorizationError(err, toast);
+			}
+		},
+
+		async createPersonnel(formData, toast) {
+			try {
+				const res = await axiosInstance.post("/personnels", formData, {
+					headers: { Authorization: `Bearer ${localStorage.getItem("token")}`},
+				});
+				this.errors = {};
+				return res.data;
+			} catch (err) {
+				if (err.response?.status === 422) {
+					this.errors = err.response.data.errors;
+				}
+				this.handleAuthorizationError(err, toast);
+				throw err;
+			}
+		},
+
+		async updatePersonnel(id, formData, toast) {
+			try {
+				const res = await axiosInstance.put(`/personnels/${id}`, formData, {
+					headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+				});
+				this.errors = {};
+				return res.data;
+			} catch (err) {
+				if (err.response?.status === 422) {
+					this.errors = err.response.data.errors;
+				}
+				this.handleAuthorizationError(err, toast);
+				throw err;
+			}
+		},
+
+		async deletePersonnel(id, toast) {
+			try {
+				const res = await axiosInstance.delete(`/personnels/${id}`, {
+					headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+				});
+				return res.data;
+			} catch (err) {
+				toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete personnel", life: 3000 });
+				this.handleAuthorizationError(err, toast);
+			}
+		},
+
+        // ---------- PERSONNEL CREATION DROPDOWN LISTS ----------
+        
+        async getSocietes(toast) {
+            try {
+                const res = await axiosInstance.get("/societes-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load societes", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getDirections(toast) {
+            try {
+                const res = await axiosInstance.get("/directions-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load directions", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getFonctions(toast) {
+            try {
+                const res = await axiosInstance.get("/fonctions-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load fonctions", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getRegions(toast) {
+            try {
+                const res = await axiosInstance.get("/regions-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load regions", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getZones(toast) {
+            try {
+                const res = await axiosInstance.get("/zones-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load zones", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getSites(toast) {
+            try {
+                const res = await axiosInstance.get("/sites-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load sites", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getDepartements(toast) {
+            try {
+                const res = await axiosInstance.get("/departements-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load departements", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getGrades(toast) {
+            try {
+                const res = await axiosInstance.get("/grades-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load grades", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getDivisions(toast) {
+            try {
+                const res = await axiosInstance.get("/divisions-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load divisions", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getCentreCouts(toast) {
+            try {
+                const res = await axiosInstance.get("/centre-couts-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load centre couts", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+        
 
         // ---------- TYPE CARBURANTS ----------
         async getFamilleVehicules(params = {}, toast) {

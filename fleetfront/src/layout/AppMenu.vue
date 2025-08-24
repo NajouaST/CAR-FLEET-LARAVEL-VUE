@@ -15,7 +15,8 @@ const model = ref([
                 label: 'Dashboard',
                 icon: 'pi pi-fw pi-home',
                 to: '/dashboard' ,
-            }
+            },
+            
         ]
     },
     {
@@ -38,6 +39,16 @@ const model = ref([
     {
         label: 'Parc',
         items: [
+            {
+                label: 'Fiche véhicule',
+                icon: 'pi pi-fw pi-file',
+                to: '/parc/fiche-vehicule'
+            },
+            {
+                label: 'Affectations véhicules',
+                icon: 'pi pi-fw pi-share-alt',
+                to: '/parc/affectations-vehicules'
+            },
             {
                 label: 'Params',
                 icon: 'pi pi-fw pi-cog',
@@ -72,6 +83,11 @@ const model = ref([
         label: 'Parametres Genereaux',
         permission: "params access",
         items: [
+            {
+                label: 'Fiche personnel',
+                icon: 'pi pi-fw pi-user',
+                to: '/params/fiche-personnel'
+            },
             {
                 label: 'Type Compteur',
                 icon: 'pi pi-fw pi-users',

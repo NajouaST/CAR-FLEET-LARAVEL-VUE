@@ -4,6 +4,17 @@ use App\Http\Controllers\API\params\FamilleVehiculeController;
 use App\Http\Controllers\API\params\FournisseurController;
 use App\Http\Controllers\API\params\TypeCarburantController;
 use App\Http\Controllers\API\params\TypeCompteurController;
+use App\Http\Controllers\API\params\PersonnelController;
+use App\Http\Controllers\API\params\SocieteController;
+use App\Http\Controllers\API\params\DirectionController;
+use App\Http\Controllers\API\params\FonctionController;
+use App\Http\Controllers\API\params\RegionController;
+use App\Http\Controllers\API\params\ZoneController;
+use App\Http\Controllers\API\params\SiteController;
+use App\Http\Controllers\API\params\DepartementController;
+use App\Http\Controllers\API\params\GradeController;
+use App\Http\Controllers\API\params\DivisionController;
+use App\Http\Controllers\API\params\CentreCoutController;
 use App\Http\Controllers\API\parc\GammeController;
 use App\Http\Controllers\API\parc\MarqueController;
 use App\Http\Controllers\API\parc\ModeleController;
@@ -88,6 +99,50 @@ Route::middleware(['auth:sanctum'])->group(function () {
 /**********************************     PARAM GENEREAUX      ************************************/
 Route::middleware(['auth:sanctum'])->group(function () {
 
+    /**********************************     PERSONNEL      ************************************/
+    Route::apiResource('personnels', PersonnelController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('personnels-names', [PersonnelController::class, 'listNames']);
+    
+    /**********************************     SOCIETE      ************************************/
+    Route::apiResource('societes', SocieteController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('societes-names', [SocieteController::class, 'listNames']);
+
+    /**********************************     DIRECTION      ************************************/
+    Route::apiResource('directions', DirectionController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('directions-names', [DirectionController::class, 'listNames']);
+
+    /**********************************     FONCTION      ************************************/
+    Route::apiResource('fonctions', FonctionController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('fonctions-names', [FonctionController::class, 'listNames']);
+
+    /**********************************     REGION      ************************************/
+    Route::apiResource('regions', RegionController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('regions-names', [RegionController::class, 'listNames']);
+
+    /**********************************     ZONE      ************************************/
+    Route::apiResource('zones', ZoneController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('zones-names', [ZoneController::class, 'listNames']);
+
+    /**********************************     SITE      ************************************/
+    Route::apiResource('sites', SiteController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('sites-names', [SiteController::class, 'listNames']);
+
+    /**********************************     DEPARTEMENT      ************************************/
+    Route::apiResource('departements', DepartementController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('departements-names', [DepartementController::class, 'listNames']);
+
+    /**********************************     GRADE      ************************************/
+    Route::apiResource('grades', GradeController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('grades-names', [GradeController::class, 'listNames']);
+
+    /**********************************     DIVISION      ************************************/
+    Route::apiResource('divisions', DivisionController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('divisions-names', [DivisionController::class, 'listNames']);
+
+    /**********************************     CENTRE COUT      ************************************/
+    Route::apiResource('centre-couts', CentreCoutController::class)->middleware(PermissionMiddleware::using('params access'));
+    Route::get('centre-couts-names', [CentreCoutController::class, 'listNames']);
+    
     /**********************************     COMPTEUR      ************************************/
     Route::apiResource('type-compteurs', TypeCompteurController::class)->middleware(PermissionMiddleware::using('params access'));
     Route::get('type-compteurs-names', [TypeCompteurController::class, 'listNames']);

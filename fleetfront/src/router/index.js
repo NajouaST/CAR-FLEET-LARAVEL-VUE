@@ -90,6 +90,17 @@ const router = createRouter({
                     path: 'parc',
                     children: [
                         {
+                            path: 'fiche-vehicule',
+                            meta: { permission: "params access" },
+                            component: () => import('@/views/pages/parc/fiche-vehicule/ViewFicheVehicule.vue'),
+                            
+                        },
+                        {
+                            path: 'affectations-vehicules',
+                            meta: { permission: "params access" },
+                            component: () => import('@/views/pages/parc/affectations-vehicules/ViewAffectationsVehicules.vue'),
+                        },
+                        {
                             path: 'params',
                             children: [
                                 {
@@ -144,6 +155,11 @@ const router = createRouter({
                 {
                     path: 'params',
                     children: [
+                        {
+                            path: 'fiche-personnel',
+                            meta: { permission: "params access" },
+                            component: () => import('@/views/pages/params/ViewFichePersonnel.vue'),
+                        },
                         {
                             path: 'type-carburant',
                             meta: { permission: "params access" },
