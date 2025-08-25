@@ -12,10 +12,9 @@ class Personnel extends Model
 
     protected $table = 'personnels';
 
-    
+
     protected $fillable = [
         'matriculation',
-        'nom',
         'cin',
         'societe_id',
         'direction_id',
@@ -27,21 +26,20 @@ class Personnel extends Model
         'grade_id',
         'division_id',
         'centre_cout_id',
+        'user_id',
+        'carte_carburant_id',
         'tel',
         'superviseur',
-        'email',
         'titre',
         'adresse',
         'type',
         'sexe',
-        'tjrs_actif',
-        'num_carte_carb',
         'num_permis',
         'delivre_le',
         'fin_validite'
     ];
 
-    
+
     protected $casts = [
         'delivre_le' => 'date',
         'fin_validite' => 'date',
@@ -97,5 +95,15 @@ class Personnel extends Model
     public function centreCout()
     {
         return $this->belongsTo(CentreCout::class);
+    }
+
+    public function carteCarburant()
+    {
+        return $this->belongsTo(carteCarburant::class);
+    }
+
+    public function User()
+    {
+        return $this->belongsTo(User::class);
     }
 }

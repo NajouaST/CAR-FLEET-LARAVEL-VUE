@@ -24,28 +24,6 @@ class ParcSeeder extends Seeder
      */
     public function run(): void
     {
-        // Familles
-        $familles = [
-            FamilleVehicule::create(['name' => 'Personnel', 'renouvelable' => 4]),
-            FamilleVehicule::create(['name' => 'Utilitaire', 'renouvelable' => 1]),
-            FamilleVehicule::create(['name' => 'Poids lourd', 'renouvelable' => 2]),
-        ];
-
-        // Fournisseurs
-        $fournisseurs = [
-            Fournisseur::create(['name' => 'Auto Distribution', 'email' => 'contact@autodistrib.com', 'tel' => '22112211', 'adresse' => 'Tunis']),
-            Fournisseur::create(['name' => 'Car Import', 'email' => 'sales@carimport.com', 'tel' => '22334455', 'adresse' => 'Sfax']),
-        ];
-
-        // Carburants
-        $diesel = TypeCarburant::create(['name' => 'Diesel']);
-        $essence = TypeCarburant::create(['name' => 'Essence']);
-        $ssp = TypeCarburant::create(['name' => 'SSP']);
-
-        // Compteurs
-        $km = TypeCompteur::create(['name' => 'KM']);
-        $miles = TypeCompteur::create(['name' => 'Miles']);
-
         // Gammes
         $suv = Gamme::create([ 'name' => 'SUV']);
         $sedan = Gamme::create([ 'name' => 'Sedan']);
@@ -71,8 +49,8 @@ class ParcSeeder extends Seeder
             'consommation_moy' => 8.5,
             'marque_id' => $bmw->id,
             'gamme_id' => $suv->id,
-            'type_compteur_id' => $km->id,
-            'type_carburant_id' => $diesel->id,
+            'type_compteur_id' => 1,
+            'type_carburant_id' => 1,
         ]);
 
         $modele2 = Modele::create([
@@ -88,8 +66,8 @@ class ParcSeeder extends Seeder
             'consommation_moy' => 5.2,
             'marque_id' => $kia->id,
             'gamme_id' => $sedan->id,
-            'type_compteur_id' => $km->id,
-            'type_carburant_id' => $essence->id,
+            'type_compteur_id' => 1,
+            'type_carburant_id' => 1,
         ]);
 
         $modele3 = Modele::create([
@@ -105,8 +83,8 @@ class ParcSeeder extends Seeder
             'consommation_moy' => 6,
             'marque_id' => $ford->id,
             'gamme_id' => $sedan->id,
-            'type_compteur_id' => $km->id,
-            'type_carburant_id' => $ssp->id,
+            'type_compteur_id' => 1,
+            'type_carburant_id' => 1,
         ]);
 
         $modele4 = Modele::create([
@@ -122,8 +100,8 @@ class ParcSeeder extends Seeder
             'consommation_moy' => 10.5,
             'marque_id' => $vw->id,
             'gamme_id' => $suv->id,
-            'type_compteur_id' => $miles->id,
-            'type_carburant_id' => $diesel->id,
+            'type_compteur_id' => 1,
+            'type_carburant_id' => 1,
         ]);
 
         $modele5 = Modele::create([
@@ -139,8 +117,8 @@ class ParcSeeder extends Seeder
             'consommation_moy' => 0,
             'marque_id' => $bmw->id,
             'gamme_id' => $hybride->id,
-            'type_compteur_id' => $km->id,
-            'type_carburant_id' => $essence->id,
+            'type_compteur_id' => 1,
+            'type_carburant_id' => 1,
         ]);
 
         // Véhicules (4–5)
@@ -161,8 +139,8 @@ class ParcSeeder extends Seeder
             'date_garantie' => now()->addYear(),
             'km_garantie' => 100000,
             'modele_id' => $modele1->id,
-            'famille_vehicule_id' => $familles[0]->id,
-            'fournisseur_id' => $fournisseurs[0]->id,
+            'famille_vehicule_id' => 1,
+            'fournisseur_id' => 1,
         ]);
 
         Vehicule::create([
@@ -181,8 +159,8 @@ class ParcSeeder extends Seeder
             'date_garantie' => now()->addYears(2),
             'km_garantie' => 60000,
             'modele_id' => $modele2->id,
-            'famille_vehicule_id' => $familles[1]->id,
-            'fournisseur_id' => $fournisseurs[1]->id,
+            'famille_vehicule_id' => 1,
+            'fournisseur_id' => 1,
         ]);
 
         Vehicule::create([
@@ -201,8 +179,8 @@ class ParcSeeder extends Seeder
             'date_garantie' => now()->subMonths(6),
             'km_garantie' => 80000,
             'modele_id' => $modele3->id,
-            'famille_vehicule_id' => $familles[0]->id,
-            'fournisseur_id' => $fournisseurs[0]->id,
+            'famille_vehicule_id' => 1,
+            'fournisseur_id' => 1,
         ]);
 
         Vehicule::create([
@@ -221,8 +199,8 @@ class ParcSeeder extends Seeder
             'date_garantie' => now()->subYear(),
             'km_garantie' => 120000,
             'modele_id' => $modele4->id,
-            'famille_vehicule_id' => $familles[2]->id,
-            'fournisseur_id' => $fournisseurs[1]->id,
+            'famille_vehicule_id' => 2,
+            'fournisseur_id' => 2,
         ]);
 
         Vehicule::create([
@@ -241,8 +219,8 @@ class ParcSeeder extends Seeder
             'date_garantie' => now()->addYears(3),
             'km_garantie' => 80000,
             'modele_id' => $modele5->id,
-            'famille_vehicule_id' => $familles[0]->id,
-            'fournisseur_id' => $fournisseurs[0]->id,
+            'famille_vehicule_id' => 1,
+            'fournisseur_id' => 2,
         ]);
     }
 }

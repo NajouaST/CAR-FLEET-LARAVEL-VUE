@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API\params;
+namespace App\Http\Controllers\API\RH\RHParams;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\NameResource;
 use App\Models\Division;
 use App\Traits\HasQueryFilters;
 use Illuminate\Http\Request;

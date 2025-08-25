@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\API\parc;
+namespace App\Http\Controllers\API\parc\parcParams;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModeleResource;
-use App\Http\Resources\NameResource;
 use App\Models\Modele;
 use App\Traits\HasQueryFilters;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ModeleController extends Controller
 {

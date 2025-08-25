@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\API\parc;
+namespace App\Http\Controllers\API\parc\parcParams;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NameResource;
 use App\Models\Gamme;
 use App\Traits\HasQueryFilters;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class GammeController extends Controller
 {

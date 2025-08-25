@@ -22,7 +22,7 @@ export const useParcStore = defineStore('parcStore', {
 
                 return res.data;
             } catch (err) {
-                toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load marques', life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load vehicules', life: 3000 });
                 this.handleAuthorizationError(err,toast);
             }
         },

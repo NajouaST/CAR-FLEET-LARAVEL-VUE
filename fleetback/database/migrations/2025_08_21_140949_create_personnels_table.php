@@ -14,36 +14,33 @@ return new class extends Migration
         Schema::create('personnels', function (Blueprint $table) {
             $table->id();
             $table->string('matriculation')->unique();
-            $table->string('nom');
             $table->string('cin')->unique();
 
             // foreign keys
-            $table->foreignId('societe_id')->constrained('societes');
-            $table->foreignId('direction_id')->constrained('directions');
-            $table->foreignId('fonction_id')->constrained('fonctions');
-            $table->foreignId('region_id')->constrained('regions');
-            $table->foreignId('zone_id')->constrained('zones');
-            $table->foreignId('site_id')->constrained('sites');
-            $table->foreignId('departement_id')->constrained('departements');
-            $table->foreignId('grade_id')->constrained('grades');
-            $table->foreignId('division_id')->constrained('divisions');
-            $table->foreignId('centre_cout_id')->constrained('centre_couts');
+            $table->foreignId('carte_carburant_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('societe_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('direction_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('fonction_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('region_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('zone_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('site_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('departement_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('grade_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('division_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('centre_cout_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
 
             $table->string('tel');
             $table->string('superviseur')->nullable();
-            $table->string('email')->unique();
             $table->string('titre');
             $table->text('adresse');
             $table->enum('type', ['sédentaire', 'force de vente']);
             $table->enum('sexe', ['h', 'f']);
-            $table->enum('tjrs_actif', ['oui', 'non'])->default('oui');
-            $table->bigInteger('num_carte_carb')->nullable();
 
             // permis
             $table->string('num_permis');
             $table->date('delivre_le');
             $table->date('fin_validite');
-
 
             $table->timestamps();
         });
