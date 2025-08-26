@@ -19,7 +19,7 @@ class MarqueController extends Controller
         $result = $this->applyQueryParameters($query, $request);
 
         return collect($result['data'])
-            ->map(fn($item) => (new MarqueResource($item))->additional(['mode' => 'minimal']));
+            ->map(fn($item) => (new MarqueResource($item)));
     }
 
     // -----------------------
@@ -35,7 +35,7 @@ class MarqueController extends Controller
             'code' => 200,
             'message' => 'Marques retrieved',
             'data' => collect($result['data'])
-                ->map(fn($item) => (new MarqueResource($item))->additional(['mode' => 'grid'])),
+                ->map(fn($item) => (new MarqueResource($item))),
             'totalRecords' => $result['totalRecords'],
         ];
     }

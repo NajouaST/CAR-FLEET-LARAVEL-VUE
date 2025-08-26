@@ -88,7 +88,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     /**********************************     PARAMS      ************************************/
     Route::apiResource('marques', MarqueController::class)->middleware(PermissionMiddleware::using('parcparams access'));
-    Route::get('marques-names', [MarqueController::class, 'listNames']);
     Route::apiResource('modeles', ModeleController::class)->middleware(PermissionMiddleware::using('parcparams access'));
     Route::get('modeles-names', [ModeleController::class, 'listNames']);
     Route::apiResource('gammes', GammeController::class)->middleware(PermissionMiddleware::using('parcparams access'));

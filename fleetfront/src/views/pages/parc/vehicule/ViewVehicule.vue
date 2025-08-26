@@ -39,6 +39,9 @@ const defaultFilters = {
     modele__name: { value: null, matchMode: FilterMatchMode.EQUALS },
     familleVehicule__name: { value: null, matchMode: FilterMatchMode.EQUALS },
     fournisseur__name: { value: null, matchMode: FilterMatchMode.EQUALS },
+    situation: { value: null, matchMode: FilterMatchMode.EQUALS },
+    statut: { value: null, matchMode: FilterMatchMode.EQUALS },
+    formule_achat: { value: null, matchMode: FilterMatchMode.EQUALS },
 };
 const filters = ref({ ...defaultFilters });
 const authUserId = computed(() => authStore.user?.id);
@@ -123,6 +126,37 @@ const removeFilter = (field) => {
     fetchVehicules(lazyParams.value);
 };
 
+const getSituationSeverity = (situation) => {
+    switch (situation) {
+        case "en_exploitation": return "success";
+        case "en_reparation": return "warn";
+        case "accidentee": return "danger";
+        case "arretee": return "secondary";
+        case "litige": return "info";
+        case "epave": return "contrast";
+        case "vendue": return "primary";
+        default: return "info";
+    }
+};
+
+const getStatutSeverity = (statut) => {
+    switch (statut) {
+        case "libre": return "success";
+        case "affectee": return "primary";
+        case "hors_service": return "danger";
+        case "vendue": return "secondary";
+        default: return "info";
+    }
+};
+
+const getFormuleAchatSeverity = (formule) => {
+    switch (formule) {
+        case "fond_propre": return "success";
+        case "leasing": return "info";
+        case "LLD": return "primary";
+        default: return "info";
+    }
+};
 // CRUD navigation
 function openNew() {
     router.push({ name: "createVehicule" });
@@ -131,6 +165,12 @@ function openNew() {
 function editVehicule(v) {
     router.push({ name: "editVehicule", params: { id: v.id } });
 }
+
+const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+};
 
 function showVehicule(v) {
     router.push({ name: "showVehicule", params: { id: v.id } });
@@ -201,18 +241,57 @@ async function deleteVehicule() {
                     <template #empty>No véhicules found.</template>
 
                     <Column field="id" header="ID" sortable style="max-width: 4rem" />
-                    <Column field="assigned_to" header="Affectée" style="min-width: 6rem">
-                        <template #body="{ data }">
-                            <i v-if="data.assigned_to !== null" class="pi pi-check-circle text-green-500"></i>
-                            <i v-else class="pi pi-times-circle text-red-400"></i>
-                        </template>
-                    </Column>
                     <Column field="immatriculation" header="Immatriculation" sortable />
                     <Column field="chassis" header="Chassis" sortable />
+                    <Column field="situation" header="Situation" filterField="situation" sortable>
+                        <template #body="{ data }">
+                            <Tag :value="data.situation" :severity="getSituationSeverity(data.situation)" />
+                        </template>
+                        <template #filter="{ filterModel, filterCallback }">
+                            <MultiSelect
+                                v-model="filterModel.value"
+                                :options="[
+                                    { label: 'En exploitation', value: 'en_exploitation' },
+                                    { label: 'En réparation', value: 'en_reparation' },
+                                    { label: 'Accidentée', value: 'accidentee' },
+                                    { label: 'Arrêtée', value: 'arretee' },
+                                    { label: 'Litige', value: 'litige' },
+                                    { label: 'Épave', value: 'epave' },
+                                    { label: 'Vendue', value: 'vendue' }
+                                ]"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Any Situation"
+                                class="w-full"
+                                @change="filterCallback"
+                            />
+                        </template>
+                    </Column>
+                    <Column field="statut" header="Statut" filterField="statut" sortable>
+                        <template #body="{ data }">
+                            <Tag :value="data.statut" :severity="getStatutSeverity(data.statut)" />
+                        </template>
+                        <template #filter="{ filterModel, filterCallback }">
+                            <MultiSelect
+                                    v-model="filterModel.value"
+                                :options="[
+                                    { label: 'Libre', value: 'libre' },
+                                    { label: 'Affectée', value: 'affectee' },
+                                    { label: 'Hors service', value: 'hors_service' },
+                                    { label: 'Vendue', value: 'vendue' }
+                                ]"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Any Statut"
+                                class="w-full"
+                                @change="filterCallback"
+                            />
+                        </template>
+                    </Column>
                     <Column header="Marque" field="modele.marque_id" style="min-width: 12rem" sortable>
                         <template #body="{ data }">
                             <div class="flex items-center gap-4 pl-4">
-                                <img v-if="data.marque?.image_url" :src="data.marque?.image_url" class="w-10 rounded" />
+                                <Image v-if="data.marque?.image_url" :src="data.marque?.image_url" class="w-10 rounded" preview />
                                 <span>{{ data.marque?.name }}</span>
                             </div>
                         </template>
@@ -240,7 +319,7 @@ async function deleteVehicule() {
                     <Column header="Famille" field="famille.name" filterField="familleVehicule__name" sortable>
                         <template #body="{ data }">{{ data.famille?.name }}</template>
                         <template #filter="{ filterModel, filterCallback }">
-                            <Dropdown v-model="filterModel.value" @change="filterCallback()"
+                            <MultiSelect v-model="filterModel.value" @change="filterCallback()"
                                       :options="familles" optionLabel="name" optionValue="name"
                                       placeholder="Any Famille" class="w-full" />
                         </template>
@@ -248,18 +327,44 @@ async function deleteVehicule() {
                     <Column header="Fournisseur" field="fournisseur.name" filterField="fournisseur__name" sortable>
                         <template #body="{ data }">{{ data.fournisseur?.name }}</template>
                         <template #filter="{ filterModel, filterCallback }">
-                            <Dropdown v-model="filterModel.value" @change="filterCallback()"
+                            <MultiSelect v-model="filterModel.value" @change="filterCallback()"
                                       :options="fournisseurs" optionLabel="name" optionValue="name"
                                       placeholder="Any Fournisseur" class="w-full" />
                         </template>
                     </Column>
                     <Column field="categorie" header="Categorie" sortable />
-                    <Column field="situation" header="Situation" sortable />
-                    <Column field="statut" header="Statut" sortable />
-                    <Column field="formule_achat" header="Formule Achat" sortable />
-                    <Column field="date" header="Date" sortable />
-                    <Column field="valeur" header="Valeur" sortable />
-                    <Column field="date_cession" header="Date Cession" sortable />
+                    <Column field="formule_achat" header="Formule Achat" filterField="formule_achat" sortable>
+                        <template #body="{ data }">
+                            <Tag :value="data.formule_achat" :severity="getFormuleAchatSeverity(data.formule_achat)" />
+                        </template>
+                        <template #filter="{ filterModel, filterCallback }">
+                            <MultiSelect
+                                v-model="filterModel.value"
+                                :options="[
+                                    { label: 'Fond propre', value: 'fond_propre' },
+                                    { label: 'Leasing', value: 'leasing' },
+                                    { label: 'LLD', value: 'LLD' }
+                                ]"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Any Formule"
+                                class="w-full"
+                                @change="filterCallback"
+                            />
+                        </template>
+                    </Column>
+                    <Column field="date" header="Date" sortable style="min-width: 12rem">
+                        <template #body="{ data }">
+                            {{ formatDate(data.date) }}
+                        </template>
+                    </Column>
+
+                    <Column field="date_cession" header="Date Cession" sortable style="min-width: 12rem">
+                        <template #body="{ data }">
+                            {{ formatDate(data.date_cession) }}
+                        </template>
+                    </Column>
+
 
                     <!-- Actions -->
                     <Column :exportable="false" header="Action" alignFrozen="right" style="min-width: 12rem" frozen>

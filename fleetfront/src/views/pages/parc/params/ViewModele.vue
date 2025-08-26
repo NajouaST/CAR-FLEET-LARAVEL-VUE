@@ -242,7 +242,7 @@ async function deleteModele() {
                         <!-- Body cell -->
                         <template #body="{ data }">
                             <div class="flex items-center gap-4 pl-4">
-                                <img v-if="data.marque?.image_url" :src="data.marque?.image_url" class="w-10 rounded" />
+                                <Image v-if="data.marque?.image_url" :src="data.marque?.image_url" class="w-10 rounded" preview />
                                 <span>{{ data.marque?.name }}</span>
                             </div>
                         </template>
@@ -260,7 +260,7 @@ async function deleteModele() {
                             >
                                 <template #option="{ option }">
                                     <div class="flex items-center gap-4 pl-4">
-                                        <img v-if="option.image_url" :src="option.image_url" class="w-6 rounded" />
+                                        <Image v-if="option.image_url" :src="option.image_url" class="w-6 rounded" />
                                         <span>{{ option.name }}</span>
                                     </div>
                                 </template>
@@ -324,11 +324,12 @@ async function deleteModele() {
                                     <!-- Selected Marque Image -->
                                     <div class="flex justify-center">
                                         <div v-if="modele.marque_id">
-                                            <img
+                                            <Image
                                                 v-if="marques.find(m => m.id === modele.marque_id)?.image_url"
                                                 :src="marques.find(m => m.id === modele.marque_id)?.image_url"
+                                                preview
                                                 alt="Marque Image"
-                                                class="rounded max-h-20 object-contain"
+                                                class="rounded max-w-20 object-contain"
                                             />
                                             <span v-else class="text-gray-400 italic">No Image</span>
                                         </div>

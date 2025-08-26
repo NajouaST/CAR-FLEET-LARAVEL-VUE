@@ -46,25 +46,13 @@ class ModeleResource extends JsonResource
         // Modes: minimal, grid, full
         $mode = $this->additional['mode'] ?? 'full';
 
-        if ($mode === 'minimal') {
+        if ($mode === 'mini') {
             return [
                 'id'   => $this->id,
                 'name' => $this->name,
             ];
         }
 
-        if ($mode === 'grid') {
-            return [
-                'id'     => $this->id,
-                'name'   => $this->name,
-                'marque' => $this->marqueData(),
-                'gamme'            => $this->gammeData(),
-                'type_compteur'    => $this->typeCompteurData(),
-                'type_carburant'   => $this->typeCarburantData(),
-            ];
-        }
-
-        // Full representation
         return [
             'id'                => $this->id,
             'name'              => $this->name,

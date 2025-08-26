@@ -9,16 +9,6 @@ class MarqueResource extends JsonResource
 {
     public function toArray($request)
     {
-        // Modes: minimal, grid, full
-        $mode = $this->additional['mode'] ?? 'full';
-
-        if ($mode === 'minimal') {
-            return [
-                'id'   => $this->id,
-                'name' => $this->name,
-            ];
-        }
-
         // Full representation
         return [
             'id'                => $this->id,

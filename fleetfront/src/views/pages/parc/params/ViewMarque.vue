@@ -213,7 +213,7 @@ function onFileSelect(event) {
 
                     <Column header="Image" field="image_url" style="min-width: 4rem">
                         <template #body="{ data }">
-                            <img v-if="data.image_url" :src="data.image_url" class="rounded" style="max-width: 2rem" />
+                            <Image v-if="data.image_url" :src="data.image_url" class="rounded" style="max-width: 2rem" preview />
                         </template>
                     </Column>
 
@@ -240,9 +240,9 @@ function onFileSelect(event) {
                             <label for="image" class="block font-bold mb-3">Image</label>
                             <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary"
                                         class="p-button-outlined" />
-                            <img v-if="marque.imagePreview || marque.image_url"
+                            <Image v-if="marque.imagePreview || marque.image_url"
                                  :src="marque.imagePreview || marque.image_url"
-                                 class="mt-2 rounded w-32" />
+                                 class="mt-2 rounded w-32" preview />
                         </div>
                     </div>
 

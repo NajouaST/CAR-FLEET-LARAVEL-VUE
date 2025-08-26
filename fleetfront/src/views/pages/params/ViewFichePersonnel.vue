@@ -29,7 +29,7 @@ const deletePersonnelDialog = ref(false);
 const personnel = ref({});
 const submitted = ref(false);
 
-// dropdown data 
+// dropdown data
 const societes = ref([]);
 const directions = ref([]);
 const fonctions = ref([]);
@@ -63,7 +63,7 @@ onMounted(() => {
 const loadDropdownData = async () => {
     try {
         console.log('Loading dropdown data...');
-        
+
         const [
             societesData,
             directionsData,
@@ -93,17 +93,17 @@ const loadDropdownData = async () => {
         console.log('Societes ref:', societes);
         console.log('Directions data:', directionsData);
 
-		// assign data to ref
-		societes.value = societesData;
-		directions.value = directionsData;
-		fonctions.value = fonctionsData;
-		regions.value = regionsData;
-		zones.value = zonesData;
-		sites.value = sitesData;
-		departements.value = departementsData;
-		grades.value = gradesData;
-		divisions.value = divisionsData;
-		centreCouts.value = centreCoutsData;
+        // assign data to ref
+        societes.value = societesData;
+        directions.value = directionsData;
+        fonctions.value = fonctionsData;
+        regions.value = regionsData;
+        zones.value = zonesData;
+        sites.value = sitesData;
+        departements.value = departementsData;
+        grades.value = gradesData;
+        divisions.value = divisionsData;
+        centreCouts.value = centreCoutsData;
 
 
     } catch (error) {
@@ -160,19 +160,19 @@ const removeFilter = (field) => {
 function openNew() {
     personnel.value = {
         tjrs_actif: true,
-		type: 'sédentaire',
-		sexe: 'h',
-		societe_id: 1,
-		direction_id: 1,
-		fonction_id: 1,
-		region_id: 1,
-		zone_id: 1,
-		site_id: 1,
-		departement_id: 1,
-		grade_id: 1,
-		division_id: 1,
-		centre_cout_id: 1,
-        
+        type: 'sédentaire',
+        sexe: 'h',
+        societe_id: 1,
+        direction_id: 1,
+        fonction_id: 1,
+        region_id: 1,
+        zone_id: 1,
+        site_id: 1,
+        departement_id: 1,
+        grade_id: 1,
+        division_id: 1,
+        centre_cout_id: 1,
+
     };
     submitted.value = false;
     personnelDialog.value = true;
@@ -189,7 +189,7 @@ async function savePersonnel() {
 
     try {
         const formData = new FormData();
-        
+
         // Basic information
         formData.append("matriculation", personnel.value.matriculation || "");
         formData.append("nom", personnel.value.nom || "");
@@ -207,7 +207,7 @@ async function savePersonnel() {
             const delivreDate = new Date(personnel.value.delivre_le);
             formData.append("delivre_le", delivreDate.toISOString().split('T')[0]);
         }
-        
+
         if (personnel.value.fin_validite) {
             const finValiditeDate = new Date(personnel.value.fin_validite);
             formData.append("fin_validite", finValiditeDate.toISOString().split('T')[0]);
@@ -227,9 +227,9 @@ async function savePersonnel() {
         if (personnel.value.division_id) formData.append("division_id", personnel.value.division_id);
         if (personnel.value.centre_cout_id) formData.append("centre_cout_id", personnel.value.centre_cout_id);
 
-		// log personnel
-		console.log('personnel:', personnel.value);
-		
+        // log personnel
+        console.log('personnel:', personnel.value);
+
         if (personnel.value.id) {
             await paramsGenereauxStore.updatePersonnel(personnel.value.id, formData, toast);
             toast.add({ severity: "success", summary: "Updated", detail: "Personnel updated", life: 3000 });
@@ -242,17 +242,17 @@ async function savePersonnel() {
         fetchPersonnels(lazyParams.value);
     } catch (err) {
         console.error('Error saving personnel:', err);
-		// ADD THIS TO SEE VALIDATION ERRORS
+        // ADD THIS TO SEE VALIDATION ERRORS
         if (err.response?.status === 422) {
             console.error('Validation errors:', err.response.data.errors);
             // Show validation errors to user
             const errors = err.response.data.errors;
             for (const [field, messages] of Object.entries(errors)) {
-                toast.add({ 
-                    severity: "error", 
-                    summary: "Validation Error", 
+                toast.add({
+                    severity: "error",
+                    summary: "Validation Error",
                     detail: `${field}: ${messages.join(', ')}`,
-                    life: 5000 
+                    life: 5000
                 });
             }
         } else {
@@ -479,7 +479,7 @@ async function deletePersonnel() {
                         <!-- Basic Information -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">Informations de Base</h3>
-                            
+
                             <div>
                                 <label for="matriculation" class="block font-medium mb-2">Matriculation *</label>
                                 <InputText id="matriculation" v-model="personnel.matriculation" required :invalid="submitted && !personnel.matriculation" class="w-full" />
@@ -526,16 +526,16 @@ async function deletePersonnel() {
                         <!-- Organizational Information -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">Informations Organisationnelles</h3>
-                            
+
                             <div>
                                 <label for="societe_id" class="block font-medium mb-2">Société</label>
-                                <Dropdown 
-                                    id="societe_id" 
-                                    v-model="personnel.societe_id" 
-                                    :options="societes" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner une société" 
+                                <Dropdown
+                                    id="societe_id"
+                                    v-model="personnel.societe_id"
+                                    :options="societes"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner une société"
                                     class="w-full"
                                     :loading="societes.length === 0"
                                 />
@@ -543,13 +543,13 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="direction_id" class="block font-medium mb-2">Direction</label>
-                                <Dropdown 
-                                    id="direction_id" 
-                                    v-model="personnel.direction_id" 
-                                    :options="directions" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner une direction" 
+                                <Dropdown
+                                    id="direction_id"
+                                    v-model="personnel.direction_id"
+                                    :options="directions"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner une direction"
                                     class="w-full"
                                     :loading="directions.length === 0"
                                 />
@@ -557,13 +557,13 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="fonction_id" class="block font-medium mb-2">Fonction</label>
-                                <Dropdown 
-                                    id="fonction_id" 
-                                    v-model="personnel.fonction_id" 
-                                    :options="fonctions" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner une fonction" 
+                                <Dropdown
+                                    id="fonction_id"
+                                    v-model="personnel.fonction_id"
+                                    :options="fonctions"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner une fonction"
                                     class="w-full"
                                     :loading="fonctions.length === 0"
                                 />
@@ -571,13 +571,13 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="grade_id" class="block font-medium mb-2">Grade</label>
-                                <Dropdown 
-                                    id="grade_id" 
-                                    v-model="personnel.grade_id" 
-                                    :options="grades" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner un grade" 
+                                <Dropdown
+                                    id="grade_id"
+                                    v-model="personnel.grade_id"
+                                    :options="grades"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner un grade"
                                     class="w-full"
                                     :loading="grades.length === 0"
                                 />
@@ -585,13 +585,13 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="departement_id" class="block font-medium mb-2">Département</label>
-                                <Dropdown 
-                                    id="departement_id" 
-                                    v-model="personnel.departement_id" 
-                                    :options="departements" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner un département" 
+                                <Dropdown
+                                    id="departement_id"
+                                    v-model="personnel.departement_id"
+                                    :options="departements"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner un département"
                                     class="w-full"
                                     :loading="departements.length === 0"
                                 />
@@ -599,13 +599,13 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="division_id" class="block font-medium mb-2">Division</label>
-                                <Dropdown 
-                                    id="division_id" 
-                                    v-model="personnel.division_id" 
-                                    :options="divisions" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner une division" 
+                                <Dropdown
+                                    id="division_id"
+                                    v-model="personnel.division_id"
+                                    :options="divisions"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner une division"
                                     class="w-full"
                                     :loading="divisions.length === 0"
                                 />
@@ -613,13 +613,13 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="centre_cout_id" class="block font-medium mb-2">Centre de Coût</label>
-                                <Dropdown 
-                                    id="centre_cout_id" 
-                                    v-model="personnel.centre_cout_id" 
-                                    :options="centreCouts" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner un centre de coût" 
+                                <Dropdown
+                                    id="centre_cout_id"
+                                    v-model="personnel.centre_cout_id"
+                                    :options="centreCouts"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner un centre de coût"
                                     class="w-full"
                                     :loading="centreCouts.length === 0"
                                 />
@@ -629,16 +629,16 @@ async function deletePersonnel() {
                         <!-- Location and Additional Information -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">Localisation et Informations Supplémentaires</h3>
-                            
+
                             <div>
                                 <label for="region_id" class="block font-medium mb-2">Région</label>
-                                <Dropdown 
-                                    id="region_id" 
-                                    v-model="personnel.region_id" 
-                                    :options="regions" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner une région" 
+                                <Dropdown
+                                    id="region_id"
+                                    v-model="personnel.region_id"
+                                    :options="regions"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner une région"
                                     class="w-full"
                                     :loading="regions.length === 0"
                                 />
@@ -646,13 +646,13 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="zone_id" class="block font-medium mb-2">Zone</label>
-                                <Dropdown 
-                                    id="zone_id" 
-                                    v-model="personnel.zone_id" 
-                                    :options="zones" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner une zone" 
+                                <Dropdown
+                                    id="zone_id"
+                                    v-model="personnel.zone_id"
+                                    :options="zones"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner une zone"
                                     class="w-full"
                                     :loading="zones.length === 0"
                                 />
@@ -660,27 +660,27 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="site_id" class="block font-medium mb-2">Site</label>
-                                <Dropdown 
-                                    id="site_id" 
-                                    v-model="personnel.site_id" 
-                                    :options="sites" 
-                                    optionLabel="nom" 
-                                    optionValue="id" 
-                                    placeholder="Sélectionner un site" 
+                                <Dropdown
+                                    id="site_id"
+                                    v-model="personnel.site_id"
+                                    :options="sites"
+                                    optionLabel="nom"
+                                    optionValue="id"
+                                    placeholder="Sélectionner un site"
                                     class="w-full"
                                     :loading="sites.length === 0"
                                 />
                             </div>
 
-							<div>
+                            <div>
                                 <label for="type" class="block font-medium mb-2">Type</label>
-                                <Dropdown 
-                                    id="type" 
-                                    v-model="personnel.type" 
-                                    :options="type" 
-                                    optionLabel="nom" 
-                                    optionValue="nom" 
-                                    placeholder="Sélectionner le type" 
+                                <Dropdown
+                                    id="type"
+                                    v-model="personnel.type"
+                                    :options="type"
+                                    optionLabel="nom"
+                                    optionValue="nom"
+                                    placeholder="Sélectionner le type"
                                     class="w-full"
                                     :loading="type.length === 0"
                                 />
@@ -688,17 +688,17 @@ async function deletePersonnel() {
 
                             <div>
                                 <label for="sexe" class="block font-medium mb-2">Sexe</label>
-                                <Dropdown 
-                                    id="sexe" 
-                                    v-model="personnel.sexe" 
+                                <Dropdown
+                                    id="sexe"
+                                    v-model="personnel.sexe"
                                     :options="[
                                         { label: 'Masculin', value: 'h' },
                                         { label: 'Féminin', value: 'f' }
-                                    ]" 
-                                    optionLabel="label" 
-                                    optionValue="value" 
-                                    placeholder="Sélectionner le sexe" 
-                                    class="w-full" 
+                                    ]"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    placeholder="Sélectionner le sexe"
+                                    class="w-full"
                                 />
                             </div>
 

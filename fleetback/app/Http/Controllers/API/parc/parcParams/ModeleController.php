@@ -13,11 +13,12 @@ class ModeleController extends Controller
     use HasQueryFilters;
     public function listNames(Request $request)
     {
-        $query = Modele::with(['marque', 'gamme', 'typeCompteur', 'typeCarburant']);
+        $query = Modele::query();
 
         $result = $this->applyQueryParameters($query, $request);
+
         return collect($result['data'])
-            ->map(fn($item) => (new ModeleResource($item))->additional(['mode' => 'grid']));
+            ->map(fn($item) => (new ModeleResource($item))->additional(['mode' => 'mini']));
     }
 
     // -----------------------
@@ -33,7 +34,7 @@ class ModeleController extends Controller
             'code' => 200,
             'message' => 'Modeles retrieved',
             'data' => collect($result['data'])
-                ->map(fn($item) => (new ModeleResource($item))->additional(['mode' => 'grid'])),
+                ->map(fn($item) => (new ModeleResource($item))),
             'totalRecords' => $result['totalRecords'],
         ];
     }
