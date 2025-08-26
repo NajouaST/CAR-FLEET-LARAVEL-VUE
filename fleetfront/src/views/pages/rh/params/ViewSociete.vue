@@ -5,10 +5,6 @@ import { useParamsGenereauxStore } from "@/store/ParamsGeneraux";
 import { FilterMatchMode } from "@primevue/core/api";
 
 // Import PrimeVue components
-import Dropdown from 'primevue/dropdown';
-import Calendar from 'primevue/calendar';
-import InputNumber from 'primevue/inputnumber';
-import Checkbox from 'primevue/checkbox';
 import Textarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
 
@@ -109,7 +105,7 @@ async function saveSociete() {
 
     try {
         const formData = new FormData();
-        
+
         if (societe.value.logo_path instanceof File) {
             formData.append("logo_path", societe.value.logo_path);
         } else if (societe.value.logo_path && typeof societe.value.logo_path === 'string') {
@@ -122,7 +118,7 @@ async function saveSociete() {
             console.log(key, value);
         }
 
-		
+
         if (societe.value.id) {
             // update existing societe
             await paramsGenereauxStore.updateSociete(societe.value.id, {nom: societe.value.nom, description: societe.value.description}, toast);
@@ -148,11 +144,11 @@ async function saveSociete() {
             console.error('Validation errors:', err.response.data.errors);
             const errors = err.response.data.errors;
             for (const [field, messages] of Object.entries(errors)) {
-                toast.add({ 
-                    severity: "error", 
-                    summary: "Validation Error", 
+                toast.add({
+                    severity: "error",
+                    summary: "Validation Error",
                     detail: `${field}: ${messages.join(', ')}`,
-                    life: 5000 
+                    life: 5000
                 });
             }
         } else {
@@ -272,8 +268,8 @@ const onLogoClear = () => {
                     <Column field="logo_path" header="Logo" sortable style="min-width: 120px">
                         <template #body="{ data }">
                             <div v-if="data.logo_path" class="flex items-center gap-2">
-                                <img 
-                                    :src="data.logo_path" 
+                                <img
+                                    :src="data.logo_path"
                                     :alt="data.nom"
                                     class="w-10 h-10 object-cover rounded"
                                     @error="$event.target.style.display='none'"
@@ -326,8 +322,8 @@ const onLogoClear = () => {
                         <!-- Preview current logo if editing -->
                         <div v-if="societe.logo_path && typeof societe.logo_path === 'string'" class="mt-4">
                             <label class="block font-medium mb-2">Current Logo</label>
-                            <img 
-                                :src="societe.logo_path" 
+                            <img
+                                :src="societe.logo_path"
                                 :alt="societe.nom"
                                 class="w-20 h-20 object-cover rounded border"
                             />

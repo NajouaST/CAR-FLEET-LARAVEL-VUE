@@ -90,12 +90,6 @@ const router = createRouter({
                     path: 'parc',
                     children: [
                         {
-                            path: 'fiche-vehicule',
-                            meta: { permission: "params access" },
-                            component: () => import('@/views/pages/parc/fiche-vehicule/ViewFicheVehicule.vue'),
-
-                        },
-                        {
                             path: 'affectations-vehicules',
                             meta: { permission: "params access" },
                             component: () => import('@/views/pages/parc/affectations-vehicules/ViewAffectationsVehicules.vue'),
@@ -158,7 +152,7 @@ const router = createRouter({
                         {
                             path: 'fiche-personnel',
                             meta: { permission: "params access" },
-                            component: () => import('@/views/pages/params/ViewFichePersonnel.vue'),
+                            component: () => import('@/views/pages/rh/fiche-personnel/ViewFichePersonnel.vue'),
                         },
                         {
                             path: 'type-carburant',
@@ -179,6 +173,46 @@ const router = createRouter({
                             path: 'fournisseur',
                             meta: { permission: "params access" },
                             component: () => import('@/views/pages/params/ViewFournissuer.vue'),
+                        },
+                    ]
+                },
+                {
+                    path: 'rh',
+                    children: [
+                        {
+                            path: 'fiche-personnel',
+                            meta: { permission: "params access" },
+                            component: () => import('@/views/pages/rh/fiche-personnel/ViewFichePersonnel.vue'),
+                        },
+                        {
+                            path: 'params',
+                            children: [
+                                {
+                                    path: 'societe',
+                                    meta: { permission: "rhparams access" },
+                                    component: () => import('@/views/pages/rh/params/ViewSociete.vue'),
+                                },
+                                {
+                                    path: 'site',
+                                    meta: { permission: "rhparams access" },
+                                    component: () => import('@/views/pages/rh/params/ViewSite.vue'),
+                                },
+                                {
+                                    path: 'departement',
+                                    meta: { permission: "rhparams access" },
+                                    component: () => import('@/views/pages/rh/params/ViewDepartement.vue'),
+                                },
+                                {
+                                    path: 'direction',
+                                    meta: { permission: "rhparams access" },
+                                    component: () => import('@/views/pages/rh/params/ViewDirection.vue'),
+                                },
+                                {
+                                    path: 'centre-de-couts',
+                                    meta: { permission: "rhparams access" },
+                                    component: () => import('@/views/pages/rh/params/ViewCentreDeCouts.vue'),
+                                },
+                            ]
                         },
                     ]
                 },
