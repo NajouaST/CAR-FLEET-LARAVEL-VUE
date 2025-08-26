@@ -24,19 +24,41 @@ class ParcSeeder extends Seeder
      */
     public function run(): void
     {
+        // Familles
+        $familles = [
+            FamilleVehicule::firstOrCreate(['name' => 'Personnel', 'renouvelable' => 4]),
+            FamilleVehicule::firstOrCreate(['name' => 'Utilitaire', 'renouvelable' => 1]),
+            FamilleVehicule::firstOrCreate(['name' => 'Poids lourd', 'renouvelable' => 2]),
+        ];
+
+        // Fournisseurs
+        $fournisseurs = [
+            Fournisseur::firstOrCreate(['name' => 'Auto Distribution', 'email' => 'contact@autodistrib.com', 'tel' => '22112211', 'adresse' => 'Tunis']),
+            Fournisseur::firstOrCreate(['name' => 'Car Import', 'email' => 'sales@carimport.com', 'tel' => '22334455', 'adresse' => 'Sfax']),
+        ];
+
+        // Carburants
+        $diesel = TypeCarburant::firstOrCreate(['name' => 'Diesel']);
+        $essence = TypeCarburant::firstOrCreate(['name' => 'Essence']);
+        $ssp = TypeCarburant::firstOrCreate(['name' => 'SSP']);
+
+        // Compteurs
+        $km = TypeCompteur::firstOrCreate(['name' => 'KM']);
+        $miles = TypeCompteur::firstOrCreate(['name' => 'Miles']);
+
         // Gammes
-        $suv = Gamme::create([ 'name' => 'SUV']);
-        $sedan = Gamme::create([ 'name' => 'Sedan']);
-        $hybride = Gamme::create([ 'name' => 'Hybrid']);
+        $suv = Gamme::firstOrCreate([ 'name' => 'SUV']);
+        $sedan = Gamme::firstOrCreate([ 'name' => 'Sedan']);
+        $hybride = Gamme::firstOrCreate([ 'name' => 'Hybrid']);
 
         // Marques
-        $bmw = Marque::create([ 'name' => 'BMW']);
-        $kia = Marque::create([ 'name' => 'KIA']);
-        $ford = Marque::create([ 'name' => 'FORD']);
-        $vw = Marque::create([ 'name' => 'VW']);
+        $bmw = Marque::firstOrCreate([ 'name' => 'BMW']);
+        $kia = Marque::firstOrCreate([ 'name' => 'KIA']);
+        $ford = Marque::firstOrCreate([ 'name' => 'FORD']);
+        $vw = Marque::firstOrCreate([ 'name' => 'VW']);
 
         // Modèles
-        $modele1 = Modele::create([
+        $modele1 = Modele::firstOrCreate([
             'name' => 'X5',
             'puissance_cv' => 300,
             'puissance_din' => 295,
@@ -53,7 +75,7 @@ class ParcSeeder extends Seeder
             'type_carburant_id' => 1,
         ]);
 
-        $modele2 = Modele::create([
+        $modele2 = Modele::firstOrCreate([
             'name' => 'Picanto',
             'puissance_cv' => 70,
             'puissance_din' => 68,
@@ -70,7 +92,7 @@ class ParcSeeder extends Seeder
             'type_carburant_id' => 1,
         ]);
 
-        $modele3 = Modele::create([
+        $modele3 = Modele::firstOrCreate([
             'name' => 'Focus',
             'puissance_cv' => 100,
             'puissance_din' => 95,
@@ -87,7 +109,7 @@ class ParcSeeder extends Seeder
             'type_carburant_id' => 1,
         ]);
 
-        $modele4 = Modele::create([
+        $modele4 = Modele::firstOrCreate([
             'name' => 'Transporter',
             'puissance_cv' => 140,
             'puissance_din' => 135,
@@ -104,7 +126,7 @@ class ParcSeeder extends Seeder
             'type_carburant_id' => 1,
         ]);
 
-        $modele5 = Modele::create([
+        $modele5 = Modele::firstOrCreate([
             'name' => 'i3',
             'puissance_cv' => 170,
             'puissance_din' => 168,
@@ -123,10 +145,10 @@ class ParcSeeder extends Seeder
 
         // Véhicules (4–5)
         // Véhicules
-        Vehicule::create([
+        $vehicule1 = Vehicule::firstOrCreate([
             'carte_grise' => 'cg_bmw_x5.pdf',
-            'immatriculation' => '123-TN-456',
-            'chassis' => 'CHASSISBMW123',
+            'immatriculation' => '125-TN-456',
+            'chassis' => 'CHASSISBMW125',
             'dmc' => now()->subYears(2),
             'couleur' => 'Noir',
             'categorie' => '4x4',
@@ -143,10 +165,10 @@ class ParcSeeder extends Seeder
             'fournisseur_id' => 1,
         ]);
 
-        Vehicule::create([
+        $vehicule2 = Vehicule::firstOrCreate([
             'carte_grise' => 'cg_kia_picanto.pdf',
-            'immatriculation' => '789-TN-321',
-            'chassis' => 'CHASSISKIA789',
+            'immatriculation' => '784-TN-321',
+            'chassis' => 'CHASSISKIA784',
             'dmc' => now()->subYear(),
             'couleur' => 'Rouge',
             'categorie' => 'Citadine',
@@ -163,10 +185,10 @@ class ParcSeeder extends Seeder
             'fournisseur_id' => 1,
         ]);
 
-        Vehicule::create([
+        $vehicule3 = Vehicule::firstOrCreate([
             'carte_grise' => 'cg_ford_focus.pdf',
-            'immatriculation' => '456-TN-654',
-            'chassis' => 'CHASSISFORD456',
+            'immatriculation' => '454-TN-654',
+            'chassis' => 'CHASSISFORD454',
             'dmc' => now()->subYears(3),
             'couleur' => 'Bleu',
             'categorie' => 'Compacte',
@@ -183,10 +205,10 @@ class ParcSeeder extends Seeder
             'fournisseur_id' => 1,
         ]);
 
-        Vehicule::create([
+        $vehicule4 = Vehicule::firstOrCreate([
             'carte_grise' => 'cg_vw_transporter.pdf',
-            'immatriculation' => '963-TN-852',
-            'chassis' => 'CHASSISVW963',
+            'immatriculation' => '943-TN-852',
+            'chassis' => 'CHASSISVW943',
             'dmc' => now()->subYears(4),
             'couleur' => 'Blanc',
             'categorie' => 'Utilitaire',
@@ -203,10 +225,10 @@ class ParcSeeder extends Seeder
             'fournisseur_id' => 2,
         ]);
 
-        Vehicule::create([
+        $vehicule5 = Vehicule::firstOrCreate([
             'carte_grise' => 'cg_bmw_i3.pdf',
-            'immatriculation' => '159-TN-753',
-            'chassis' => 'CHASSISBMW159',
+            'immatriculation' => '149-TN-753',
+            'chassis' => 'CHASSISBMW149',
             'dmc' => now()->subMonths(10),
             'couleur' => 'Gris',
             'categorie' => 'Hybride',

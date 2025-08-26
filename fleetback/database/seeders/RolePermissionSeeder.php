@@ -82,15 +82,54 @@ class RolePermissionSeeder extends Seeder
             Permission::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
         }
 
-        $roles = [
-            'Admin',
-            'Moderator',
-            'Beneficiary',
+		// Create roles
+		$admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+		$editor = Role::firstOrCreate(['name' => 'moderator', 'guard_name' => 'web']);
+		$viewer = Role::firstOrCreate(['name' => 'beneficiary', 'guard_name' => 'web']);
+
+		
+
+		$admin->syncPermissions(Permission::all());
+
+		// Create admin user
+		$adminUser = User::firstOrCreate(
+			['email' => 'admin@example.com'],
+			[
+				'name' => 'Admin User',
+				'password' => Hash::make('12345678'),
+				'is_active' => true,
+			]
+		);
+
+		// Assign admin role
+		if (!$adminUser->hasRole('admin')) {
+			$adminUser->assignRole('admin');
+		}
+
+		// Params
+		TypeCarburant::firstOrCreate(['name' => 'Diesel']);
+		TypeCarburant::firstOrCreate(['name' => 'SSP']);
+		TypeCarburant::firstOrCreate(['name' => 'Gazole']);
+
+		TypeCompteur::firstOrCreate(['name' => 'KM']);
+
+		// region seeder
+		$regions = [
+            ['nom' => 'Region Casablanca-Settat'],
+            ['nom' => 'Region Rabat-Salé-Kénitra'],
+            ['nom' => 'Region Tanger-Tétouan-Al Hoceïma'],
+            ['nom' => 'Region Fès-Meknès'],
+            ['nom' => 'Region Marrakech-Safi'],
         ];
 
+        $roles = [
+            'admin',
+            'moderator',
+            'beneficiary',
+        ];
         foreach ($roles as $name) {
             $admin = Role::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
-            if($name == "Admin")
+            if($name == "admin")
                 $admin->syncPermissions(Permission::all());
         }
 	}

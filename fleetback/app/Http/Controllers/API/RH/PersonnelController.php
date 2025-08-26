@@ -16,6 +16,7 @@ class PersonnelController extends Controller
     public function index(Request $request)
     {
         $query = Personnel::with([
+			'user',
             'societe',
             'direction',
             'fonction',
