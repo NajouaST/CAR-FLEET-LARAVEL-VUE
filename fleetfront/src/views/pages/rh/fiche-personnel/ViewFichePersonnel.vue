@@ -116,12 +116,15 @@ const fetchPersonnels = async (params = {}) => {
     loading.value = true;
     try {
         const data = await paramsGenereauxStore.getPersonnels(params, toast);
+        console.log(data);
         personnels.value = data?.data ?? [];
         totalRecords.value = data?.totalRecords ?? 0;
     } finally {
         loading.value = false;
     }
 };
+
+
 
 // table events
 const onTableEvent = (event) => {
@@ -346,11 +349,14 @@ async function deletePersonnel() {
                             <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search matriculation" />
                         </template>
                     </Column>
+                
 
-                    <Column field="nom" header="Nom" sortable style="min-width: 150px">
-                        <template #filter="{ filterModel, filterCallback }">
-                            <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search by name" />
+                    <Column field="user.name" header="Nom" sortable style="min-width: 120px">
+                        <template #body="{ data }">
+                            {{ data.user?.name || '-' }}
                         </template>
+                        
+                        
                     </Column>
 
                     <Column field="cin" header="CIN" sortable style="min-width: 120px">
@@ -359,9 +365,9 @@ async function deletePersonnel() {
                         </template>
                     </Column>
 
-                    <Column field="email" header="Email" sortable style="min-width: 180px">
-                        <template #filter="{ filterModel, filterCallback }">
-                            <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Search email" />
+                    <Column field="user.email" header="email" sortable style="min-width: 120px">
+                        <template #body="{ data }">
+                            {{ data.user?.email || '-' }}
                         </template>
                     </Column>
 
@@ -405,6 +411,7 @@ async function deletePersonnel() {
                     </Column>
 
                     <!-- Related data columns -->
+                    
                     <Column field="societe.nom" header="Société" sortable style="min-width: 120px">
                         <template #body="{ data }">
                             {{ data.societe?.nom || '-' }}
@@ -459,9 +466,9 @@ async function deletePersonnel() {
                         </template>
                     </Column>
 
-                    <Column field="centreCout.nom" header="Centre Coût" sortable style="min-width: 120px">
+                    <Column field="centre_cout.nom" header="Centre Coût" sortable style="min-width: 120px">
                         <template #body="{ data }">
-                            {{ data.centreCout?.nom || '-' }}
+                            {{ data.centre_cout?.nom || '-' }}
                         </template>
                     </Column>
 

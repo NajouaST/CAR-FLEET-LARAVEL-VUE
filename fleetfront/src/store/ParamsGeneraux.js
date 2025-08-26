@@ -540,6 +540,290 @@ export const useParamsGenereauxStore = defineStore("paramsGenereauxStore", {
             }
         },
 
+        // ---------- SOCIETES ----------
+
+        async getSocietes(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+                const res = await axiosInstance.get("/societes", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                    params: queryParams,
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load sociétés", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async createSociete(formData, toast) {
+            try {
+                const res = await axiosInstance.post("/societes", formData, {
+                    headers: { 
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        'Content-Type': 'multipart/form-data'
+                    },
+                });
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                if (err.response?.status === 422) {
+                    this.errors = err.response.data.errors;
+                }
+                this.handleAuthorizationError(err, toast);
+                throw err;
+            }
+        },
+
+        async updateSociete(id, data, toast) {
+            try {
+
+                let headers = { 
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                };
+                
+                let requestData = data;
+                
+                // Check if it's FormData or regular object
+                if (data instanceof FormData) {
+                    headers['Content-Type'] = 'multipart/form-data';
+                    console.log('Store: Sending as FormData');
+                } else {
+                    headers['Content-Type'] = 'application/json';
+                    console.log('Store: Sending as JSON');
+                }
+                
+                const res = await axiosInstance.put(`/societes/${id}`, requestData, { headers });
+                
+                console.log('Store: Update response from backend:', res.data);
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                console.error('Store: Update error:', err);
+                if (err.response?.status === 422) {
+                    this.errors = err.response.data.errors;
+                }
+                this.handleAuthorizationError(err, toast);
+                throw err;
+            }
+        },
+
+        async deleteSociete(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/societes/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete société", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        // ---------- SITES ----------
+
+        async getSites(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+                const res = await axiosInstance.get("/sites", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                    params: queryParams,
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load sites", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async createSite(formData, toast) {
+            try {
+                const res = await axiosInstance.post("/sites", formData, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to create site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+        
+        async updateSite(id, data, toast) {
+            try {
+                console.log('Store: Update site:', data);
+                const res = await axiosInstance.put(`/sites/${id}`, data, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async deleteSite(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/sites/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        // ---------- DEPARTEMENTS ----------
+
+        async getDepartements(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+                const res = await axiosInstance.get("/departements", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                    params: queryParams,
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load sites", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async createDepartement(formData, toast) {
+            try {
+                const res = await axiosInstance.post("/departements", formData, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to create site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+        
+        async updateDepartement(id, data, toast) {
+            try {
+                const res = await axiosInstance.put(`/departements/${id}`, data, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async deleteDepartement(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/departements/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        // ---------- DIRECTION ----------
+
+        async getDirections(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+                const res = await axiosInstance.get("/directions", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                    params: queryParams,
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load sites", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async createDirection(formData, toast) {
+            try {
+                const res = await axiosInstance.post("/directions", formData, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to create site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+        
+        async updateDirection(id, data, toast) {
+            try {
+                const res = await axiosInstance.put(`/directions/${id}`, data, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async deleteDirection(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/directions/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+        // ---------- DIRECTION ----------
+
+        async getCentreCouts(params = {}, toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+                const res = await axiosInstance.get("/centre-couts", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                    params: queryParams,
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load sites", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async createCentreCout(formData, toast) {
+            try {
+                const res = await axiosInstance.post("/centre-couts", formData, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to create site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+        
+        async updateCentreCout(id, data, toast) {
+            try {
+                const res = await axiosInstance.put(`/centre-couts/${id}`, data, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async deleteCentreCout(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/centre-couts/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to delete site", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
         // ---------- UTILITIES ----------
         handleAuthorizationError(error, toast) {
             const message = error?.response?.data?.message;

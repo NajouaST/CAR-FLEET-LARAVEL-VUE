@@ -81,42 +81,40 @@ const model = ref([
             {
                 label: 'Fiche personnel',
                 icon: 'pi pi-fw pi-address-book',
-                to: '/params/fiche-personnel'
+                to: '/rh/fiche-personnel'
             },
             {
                 label: 'Params',
                 icon: 'pi pi-fw pi-cog',
                 permission: "rhparams access",
                 items: [
-                    {
-                        label: 'Societe',
+                {
+                        label: 'Société',
                         icon: 'pi pi-fw pi-building',
-                        to: '/parc/params/marque'
+                        to: '/rh/params/societe'
                     },
                     {
-                        label: 'Direction',
-                        icon: 'pi pi-fw pi-sitemap',
-                        to: '/parc/params/modele'
+                        label: 'Site',
+                        icon: 'pi pi-fw pi-globe',
+                        to: '/rh/params/site'
                     },
-                    {
-                        label: 'Fonction',
-                        icon: 'pi pi-fw pi-briefcase',
-                        to: '/parc/params/modele'
-                    },
+                    
                     {
                         label: 'Departement',
-                        icon: 'pi pi-fw pi-th-large',
-                        to: '/parc/vehicule'
+                        icon: 'pi pi-fw pi-warehouse',
+                        to: '/rh/params/departement'
                     },
+                    
                     {
-                        label: 'Division',
-                        icon: 'pi pi-fw pi-th-large',
-                        to: '/parc/vehicule'
+                        label: 'Direction',
+                        icon: 'pi pi-fw pi-crown',
+                        to: '/rh/params/direction'
                     },
+                    
                     {
-                        label: 'Centre de cout',
-                        icon: 'pi pi-fw pi-wallet',
-                        to: '/parc/vehicule'
+                        label: 'Centre de coûts',
+                        icon: 'pi pi-fw pi-shopping-bag',
+                        to: '/rh/params/centre-de-couts'
                     },
                 ]
             },
@@ -146,6 +144,7 @@ const model = ref([
                 icon: 'pi pi-fw pi-truck',
                 to: '/params/fournisseur'
             },
+            
         ]
     },
 ]);

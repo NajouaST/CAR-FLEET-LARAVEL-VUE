@@ -31,13 +31,13 @@ class UserSeeder extends Seeder
         );
 
         // Assign admin role
-        if (!$adminUser->hasRole('Admin')) {
-            $adminUser->assignRole('Admin');
+        if (!$adminUser->hasRole('admin')) {
+            $adminUser->assignRole('admin');
         }
 
         // Assign moderator role
-        if (!$moderatorUser->hasRole('Moderator')) {
-            $moderatorUser->assignRole('Moderator');
+        if (!$moderatorUser->hasRole('moderator')) {
+            $moderatorUser->assignRole('moderator');
         }
     }
 }

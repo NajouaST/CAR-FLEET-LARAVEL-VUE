@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('societes', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
+            $table->string('description')->nullable();
+            $table->string('logo_path')->nullable();
             $table->timestamps();
         });
     }
