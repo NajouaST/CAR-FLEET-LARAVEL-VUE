@@ -5,6 +5,7 @@ import { useRouter, useRoute } from "vue-router";
 import { useParcStore } from "@/store/parc";
 import { useParamsParcStore } from "@/store/paramsParc";
 import { useParamsGenereauxStore } from "@/store/ParamsGeneraux";
+import VehiculeDocuments from "@/views/pages/parc/vehicule-documents/VehiculeDocuments.vue";
 
 const toast = useToast();
 const router = useRouter();
@@ -183,238 +184,241 @@ async function updateVehicule() {
 
 <template>
 
-    <div v-if="isLoading" class="card text-center my-10">
+    <div v-if="isLoading" class="card text-center my-10 min-h-80">
         <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
         <p>Loading...</p>
     </div>
-    <div v-else class="card p-6">
-        <h2 class="text-xl font-bold mb-4">Modifier Véhicule</h2>
-        <form @submit.prevent="updateVehicule" class="space-y-6">
-            <!-- Carte grise -->
-            <div>
-                <label class="block font-semibold mb-2">Numéro de Carte Grise *</label>
-                <InputText v-model="vehicule.carte_grise" placeholder="Numéro de carte grise" class="w-full" />
-                <small v-if="errors.carte_grise" class="text-red-500">{{ errors.carte_grise }}</small>
-            </div>
-
-            <!-- Carte grise images -->
-            <div class="grid grid-cols-2 gap-4">
+    <div v-else>
+        <div  class="card p-6">
+            <h2 class="text-xl font-bold mb-4">Modifier Véhicule</h2>
+            <form @submit.prevent="updateVehicule" class="space-y-6">
+                <!-- Carte grise -->
                 <div>
-                    <label class="block font-semibold mb-2">Carte Grise - Recto</label>
-                    <FileUpload mode="basic" accept="image/*" customUpload :auto="true" @uploader="handleFrontUpload" />
-                    <div v-if="carteGriseFrontPreview" class="mt-2">
-                        <Image :src="carteGriseFrontPreview" alt="Carte grise recto" class="w-40 rounded shadow" preview  />
+                    <label class="block font-semibold mb-2">Numéro de Carte Grise *</label>
+                    <InputText v-model="vehicule.carte_grise" placeholder="Numéro de carte grise" class="w-full" />
+                    <small v-if="errors.carte_grise" class="text-red-500">{{ errors.carte_grise }}</small>
+                </div>
+
+                <!-- Carte grise images -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold mb-2">Carte Grise - Recto</label>
+                        <FileUpload mode="basic" accept="image/*" customUpload :auto="true" @uploader="handleFrontUpload" />
+                        <div v-if="carteGriseFrontPreview" class="mt-2">
+                            <Image :src="carteGriseFrontPreview" alt="Carte grise recto" class="w-40 rounded shadow" preview  />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-2">Carte Grise - Verso</label>
+                        <FileUpload mode="basic" accept="image/*" customUpload :auto="true" @uploader="handleBackUpload" />
+                        <div v-if="carteGriseBackPreview" class="mt-2">
+                            <Image :src="carteGriseBackPreview" alt="Carte grise verso" class="w-40 rounded shadow" preview />
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <label class="block font-semibold mb-2">Carte Grise - Verso</label>
-                    <FileUpload mode="basic" accept="image/*" customUpload :auto="true" @uploader="handleBackUpload" />
-                    <div v-if="carteGriseBackPreview" class="mt-2">
-                        <Image :src="carteGriseBackPreview" alt="Carte grise verso" class="w-40 rounded shadow" preview />
-                    </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4">
+                    <!-- Identity -->
+                    <fieldset class="border p-4 rounded">
+                        <legend class="font-bold">Informations administratives</legend>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <div>
+                                <label class="block m-1">Immatriculation *</label>
+                                <InputText v-model="vehicule.immatriculation" class="w-full" />
+                                <small v-if="errors.immatriculation" class="text-red-500">{{ errors.immatriculation }}</small>
+                            </div>
+                            <div>
+                                <label class="block m-1">Châssis *</label>
+                                <InputText v-model="vehicule.chassis" class="w-full" />
+                                <small v-if="errors.chassis" class="text-red-500">{{ errors.chassis }}</small>
+                            </div>
+                            <div>
+                                <label class="block m-1">DMC *</label>
+                                <DatePicker v-model="vehicule.dmc" dateFormat="yy-mm-dd" class="w-full" />
+                                <small v-if="errors.dmc" class="text-red-500">{{ errors.dmc }}</small>
+                            </div>
+                            <div>
+                                <label class="block m-1">Famille Véhicule *</label>
+                                <Select
+                                    v-model="vehicule.famille_vehicule_id"
+                                    :options="familles"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    checkmark
+                                    placeholder="Choisir"
+                                    class="w-full"
+                                />
+                                <small v-if="errors.famille_vehicule_id" class="text-red-500">{{ errors.famille_vehicule_id }}</small>
+                            </div>
+                            <div>
+                                <label class="block m-1">Couleur</label>
+                                <InputText v-model="vehicule.couleur" class="w-full" />
+                            </div>
+                            <div>
+                                <label class="block m-1">Catégorie</label>
+                                <InputText v-model="vehicule.categorie" class="w-full" />
+                            </div>
+
+                            <Divider align="left" type="solid" class="col-span-2">
+                                <b>Etats</b>
+                            </Divider>
+                            <div>
+                                <label class="block m-1">Situation *</label>
+                                <Select
+                                    v-model="vehicule.situation"
+                                    :options="options.situation"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    checkmark
+                                    placeholder="Choisir"
+                                    class="w-full"
+                                />
+                                <small v-if="errors.situation" class="text-red-500">{{ errors.situation }}</small>
+                            </div>
+                            <div>
+                                <label class="block m-1">Statut *</label>
+                                <Select
+                                    v-model="vehicule.statut"
+                                    :options="options.statut"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    checkmark
+                                    placeholder="Choisir"
+                                    class="w-full"
+                                />
+                                <small v-if="errors.statut" class="text-red-500">{{ errors.statut }}</small>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Specs -->
+                    <fieldset class="border p-4 rounded">
+                        <legend class="font-bold">Caractéristiques techniques</legend>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <!-- Marque -->
+                            <div>
+                                <label class="block m-1">Marque *</label>
+                                <Select
+                                    v-model="vehicule.marque_id"
+                                    :options="marques"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    checkmark
+                                    placeholder="Choisir"
+                                    class="w-full"
+                                />
+                                <small v-if="errors.marque_id" class="text-red-500">{{ errors.marque_id }}</small>
+                            </div>
+                            <!-- Modèle -->
+                            <div>
+                                <label class="block m-1">Modèle *</label>
+                                <Select
+                                    v-model="vehicule.modele_id"
+                                    :options="modeles"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    :disabled="!vehicule.marque_id"
+                                    checkmark
+                                    placeholder="Choisir la marque d'abord"
+                                    class="w-full"
+                                />
+                                <small v-if="errors.modele_id" class="text-red-500">{{ errors.modele_id }}</small>
+                            </div>
+                            <p><strong>Puissance (CV):</strong> {{ selectedModele?.puissance_cv }}</p>
+                            <p><strong>Puissance DIN:</strong> {{ selectedModele?.puissance_din }}</p>
+                            <p><strong>Nbr Places:</strong> {{ selectedModele?.places }}</p>
+                            <p><strong>Poids Vide:</strong> {{ selectedModele?.poids_vide }}</p>
+                            <p><strong>Charge Utile:</strong> {{ selectedModele?.charge_utile }}</p>
+                            <p><strong>Charge Tc:</strong> {{ selectedModele?.poids_tc }}</p>
+                            <p><strong>Cylindres:</strong> {{ selectedModele?.cylindre }}</p>
+                            <p><strong>Type Carburant:</strong> {{ selectedModele?.type_carburant.name }}</p>
+                            <p><strong>Consommation min:</strong> {{ selectedModele?.consommation_min }}</p>
+                            <p><strong>Consommation max:</strong> {{ selectedModele?.consommation_max }}</p>
+                            <p><strong>Consommation moy:</strong> {{ selectedModele?.consommation_moy }}</p>
+                        </div>
+                    </fieldset>
+
+
+                    <!-- Achat -->
+                    <fieldset class="border p-4 rounded lg:col-span-2">
+                        <legend class="font-bold">Détails d’acquisition</legend>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <div>
+                                <label class="block m-1">Formule *</label>
+                                <Select
+                                    v-model="vehicule.formule_achat"
+                                    :options="options.formuleAchat"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    checkmark
+                                    placeholder="Choisir"
+                                    class="w-full"
+                                />
+                                <small v-if="errors.formule_achat" class="text-red-500">{{ errors.formule_achat }}</small>
+                            </div>
+                            <div>
+                                <label class="block m-1">Fournisseur</label>
+                                <Select
+                                    v-model="vehicule.fournisseur_id"
+                                    :options="fournisseurs"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    checkmark
+                                    placeholder="Choisir"
+                                    class="w-full"
+                                />
+                            </div>
+                            <div>
+                                <label class="block m-1">Date d’acquisition *</label>
+                                <Calendar v-model="vehicule.date" dateFormat="yy-mm-dd" class="w-full" />
+                                <small v-if="errors.date" class="text-red-500">{{ errors.date }}</small>
+                            </div>
+                            <div>
+                                <label class="block m-1">Valeur *</label>
+                                <InputNumber v-model="vehicule.valeur" class="w-full" mode="decimal" />
+                                <small v-if="errors.valeur" class="text-red-500">{{ errors.valeur }}</small>
+                            </div>
+                            <div v-if="vehicule.formule_achat !== 'fond_propre'">
+                                <label class="block m-1">
+                                    {{ vehicule.formule_achat === 'leasing' ? 'Amortissement' : 'Loyer' }}
+                                </label>
+                                <InputNumber
+                                    v-model="vehicule.loyer"
+                                    class="w-full"
+                                    mode="decimal"
+                                    :placeholder="vehicule.formule_achat === 'leasing' ? 'Amortissement' : 'Loyer'"
+                                />
+                            </div>
+                            <div>
+                                <label class="block m-1">Date Garantie</label>
+                                <Calendar v-model="vehicule.date_garantie" dateFormat="yy-mm-dd" class="w-full" />
+                            </div>
+                            <div>
+                                <label class="block m-1">Km Garantie</label>
+                                <InputNumber v-model="vehicule.km_garantie" class="w-full" mode="decimal" />
+                            </div>
+                            <Divider align="left" type="solid" class="col-span-2">
+                                <b>Informations de cession</b>
+                            </Divider>
+                            <div>
+                                <label class="block m-1">Date Cession</label>
+                                <Calendar v-model="vehicule.date_cession" dateFormat="yy-mm-dd" class="w-full" />
+                            </div>
+                            <div>
+                                <label class="block m-1">Valeur Cession</label>
+                                <InputNumber v-model="vehicule.valeur_cession" class="w-full" mode="decimal" />
+                            </div>
+                        </div>
+                    </fieldset>
+
                 </div>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4">
-                <!-- Identity -->
-                <fieldset class="border p-4 rounded">
-                    <legend class="font-bold">Informations administratives</legend>
-                    <div class="grid grid-cols-2 gap-4 mt-2">
-                        <div>
-                            <label class="block m-1">Immatriculation *</label>
-                            <InputText v-model="vehicule.immatriculation" class="w-full" />
-                            <small v-if="errors.immatriculation" class="text-red-500">{{ errors.immatriculation }}</small>
-                        </div>
-                        <div>
-                            <label class="block m-1">Châssis *</label>
-                            <InputText v-model="vehicule.chassis" class="w-full" />
-                            <small v-if="errors.chassis" class="text-red-500">{{ errors.chassis }}</small>
-                        </div>
-                        <div>
-                            <label class="block m-1">DMC *</label>
-                            <DatePicker v-model="vehicule.dmc" dateFormat="yy-mm-dd" class="w-full" />
-                            <small v-if="errors.dmc" class="text-red-500">{{ errors.dmc }}</small>
-                        </div>
-                        <div>
-                            <label class="block m-1">Famille Véhicule *</label>
-                            <Select
-                                v-model="vehicule.famille_vehicule_id"
-                                :options="familles"
-                                optionLabel="name"
-                                optionValue="id"
-                                checkmark
-                                placeholder="Choisir"
-                                class="w-full"
-                            />
-                            <small v-if="errors.famille_vehicule_id" class="text-red-500">{{ errors.famille_vehicule_id }}</small>
-                        </div>
-                        <div>
-                            <label class="block m-1">Couleur</label>
-                            <InputText v-model="vehicule.couleur" class="w-full" />
-                        </div>
-                        <div>
-                            <label class="block m-1">Catégorie</label>
-                            <InputText v-model="vehicule.categorie" class="w-full" />
-                        </div>
-
-                        <Divider align="left" type="solid" class="col-span-2">
-                            <b>Etats</b>
-                        </Divider>
-                        <div>
-                            <label class="block m-1">Situation *</label>
-                            <Select
-                                v-model="vehicule.situation"
-                                :options="options.situation"
-                                optionLabel="label"
-                                optionValue="value"
-                                checkmark
-                                placeholder="Choisir"
-                                class="w-full"
-                            />
-                            <small v-if="errors.situation" class="text-red-500">{{ errors.situation }}</small>
-                        </div>
-                        <div>
-                            <label class="block m-1">Statut *</label>
-                            <Select
-                                v-model="vehicule.statut"
-                                :options="options.statut"
-                                optionLabel="label"
-                                optionValue="value"
-                                checkmark
-                                placeholder="Choisir"
-                                class="w-full"
-                            />
-                            <small v-if="errors.statut" class="text-red-500">{{ errors.statut }}</small>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <!-- Specs -->
-                <fieldset class="border p-4 rounded">
-                    <legend class="font-bold">Caractéristiques techniques</legend>
-                    <div class="grid grid-cols-2 gap-4 mt-2">
-                        <!-- Marque -->
-                        <div>
-                            <label class="block m-1">Marque *</label>
-                            <Select
-                                v-model="vehicule.marque_id"
-                                :options="marques"
-                                optionLabel="name"
-                                optionValue="id"
-                                checkmark
-                                placeholder="Choisir"
-                                class="w-full"
-                            />
-                            <small v-if="errors.marque_id" class="text-red-500">{{ errors.marque_id }}</small>
-                        </div>
-                        <!-- Modèle -->
-                        <div>
-                            <label class="block m-1">Modèle *</label>
-                            <Select
-                                v-model="vehicule.modele_id"
-                                :options="modeles"
-                                optionLabel="name"
-                                optionValue="id"
-                                :disabled="!vehicule.marque_id"
-                                checkmark
-                                placeholder="Choisir la marque d'abord"
-                                class="w-full"
-                            />
-                            <small v-if="errors.modele_id" class="text-red-500">{{ errors.modele_id }}</small>
-                        </div>
-                        <p><strong>Puissance (CV):</strong> {{ selectedModele?.puissance_cv }}</p>
-                        <p><strong>Puissance DIN:</strong> {{ selectedModele?.puissance_din }}</p>
-                        <p><strong>Nbr Places:</strong> {{ selectedModele?.places }}</p>
-                        <p><strong>Poids Vide:</strong> {{ selectedModele?.poids_vide }}</p>
-                        <p><strong>Charge Utile:</strong> {{ selectedModele?.charge_utile }}</p>
-                        <p><strong>Charge Tc:</strong> {{ selectedModele?.poids_tc }}</p>
-                        <p><strong>Cylindres:</strong> {{ selectedModele?.cylindre }}</p>
-                        <p><strong>Type Carburant:</strong> {{ selectedModele?.type_carburant.name }}</p>
-                        <p><strong>Consommation min:</strong> {{ selectedModele?.consommation_min }}</p>
-                        <p><strong>Consommation max:</strong> {{ selectedModele?.consommation_max }}</p>
-                        <p><strong>Consommation moy:</strong> {{ selectedModele?.consommation_moy }}</p>
-                    </div>
-                </fieldset>
-
-
-                <!-- Achat -->
-                <fieldset class="border p-4 rounded lg:col-span-2">
-                    <legend class="font-bold">Détails d’acquisition</legend>
-                    <div class="grid grid-cols-2 gap-4 mt-2">
-                        <div>
-                            <label class="block m-1">Formule *</label>
-                            <Select
-                                v-model="vehicule.formule_achat"
-                                :options="options.formuleAchat"
-                                optionLabel="label"
-                                optionValue="value"
-                                checkmark
-                                placeholder="Choisir"
-                                class="w-full"
-                            />
-                            <small v-if="errors.formule_achat" class="text-red-500">{{ errors.formule_achat }}</small>
-                        </div>
-                        <div>
-                            <label class="block m-1">Fournisseur</label>
-                            <Select
-                                v-model="vehicule.fournisseur_id"
-                                :options="fournisseurs"
-                                optionLabel="name"
-                                optionValue="id"
-                                checkmark
-                                placeholder="Choisir"
-                                class="w-full"
-                            />
-                        </div>
-                        <div>
-                            <label class="block m-1">Date d’acquisition *</label>
-                            <Calendar v-model="vehicule.date" dateFormat="yy-mm-dd" class="w-full" />
-                            <small v-if="errors.date" class="text-red-500">{{ errors.date }}</small>
-                        </div>
-                        <div>
-                            <label class="block m-1">Valeur *</label>
-                            <InputNumber v-model="vehicule.valeur" class="w-full" mode="decimal" />
-                            <small v-if="errors.valeur" class="text-red-500">{{ errors.valeur }}</small>
-                        </div>
-                        <div v-if="vehicule.formule_achat !== 'fond_propre'">
-                            <label class="block m-1">
-                                {{ vehicule.formule_achat === 'leasing' ? 'Amortissement' : 'Loyer' }}
-                            </label>
-                            <InputNumber
-                                v-model="vehicule.loyer"
-                                class="w-full"
-                                mode="decimal"
-                                :placeholder="vehicule.formule_achat === 'leasing' ? 'Amortissement' : 'Loyer'"
-                            />
-                        </div>
-                        <div>
-                            <label class="block m-1">Date Garantie</label>
-                            <Calendar v-model="vehicule.date_garantie" dateFormat="yy-mm-dd" class="w-full" />
-                        </div>
-                        <div>
-                            <label class="block m-1">Km Garantie</label>
-                            <InputNumber v-model="vehicule.km_garantie" class="w-full" mode="decimal" />
-                        </div>
-                        <Divider align="left" type="solid" class="col-span-2">
-                            <b>Informations de cession</b>
-                        </Divider>
-                        <div>
-                            <label class="block m-1">Date Cession</label>
-                            <Calendar v-model="vehicule.date_cession" dateFormat="yy-mm-dd" class="w-full" />
-                        </div>
-                        <div>
-                            <label class="block m-1">Valeur Cession</label>
-                            <InputNumber v-model="vehicule.valeur_cession" class="w-full" mode="decimal" />
-                        </div>
-                    </div>
-                </fieldset>
-
-            </div>
-
-            <div class="flex justify-end gap-2 mt-6">
-                <Button type="button" label="Annuler" severity="secondary" @click="router.push({ name: 'vehicules' })" />
-                <Button type="submit" label="Mettre à jour" :loading="saving" />
-            </div>
-        </form>
+                <div class="flex justify-end gap-2 mt-6">
+                    <Button type="button" label="Annuler" severity="secondary" @click="router.push({ name: 'vehicules' })" />
+                    <Button type="submit" label="Mettre à jour" :loading="saving" />
+                </div>
+            </form>
+        </div>
+        <VehiculeDocuments :vehicule-id="vehicule.id" />
     </div>
 </template>

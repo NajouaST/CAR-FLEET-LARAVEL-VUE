@@ -48,7 +48,7 @@ const fetchDepartements = async (params = {}) => {
 // Row edit save handler
 const onRowEditSave = async (event) => {
     const { newData, index } = event;
-    
+
     try {
         const formData = new FormData();
         if(!newData.nom){
@@ -56,17 +56,17 @@ const onRowEditSave = async (event) => {
             return;
         }
         formData.append("nom", newData.nom);
-        
+
         await paramsGenereauxStore.updateDepartement(newData.id, formData, toast);
-        
+
         // Update local data
         departements.value[index] = newData;
-        
+
         toast.add({ severity: "success", summary: "Updated", detail: "Departement updated successfully", life: 3000 });
     } catch (err) {
         console.error('Failed to update departement:', err);
         toast.add({ severity: "error", summary: "Error", detail: "Failed to update departement", life: 3000 });
-        
+
         // Revert the change in UI if update fails
         departements.value[index] = event.data;
     }
@@ -126,7 +126,7 @@ async function saveDepartement() {
     try {
         const formData = new FormData();
         formData.append("nom", departement.value.nom || "");
-        
+
         if (departement.value.id) {
             await paramsGenereauxStore.updateDepartement(departement.value.id, formData, toast);
             toast.add({ severity: "success", summary: "Updated", detail: "departement updated", life: 3000 });
@@ -142,11 +142,11 @@ async function saveDepartement() {
         if (err.response?.status === 422) {
             const errors = err.response.data.errors;
             for (const [field, messages] of Object.entries(errors)) {
-                toast.add({ 
-                    severity: "error", 
-                    summary: "Validation Error", 
+                toast.add({
+                    severity: "error",
+                    summary: "Validation Error",
                     detail: `${field}: ${messages.join(', ')}`,
-                    life: 5000 
+                    life: 5000
                 });
             }
         } else {
@@ -258,15 +258,15 @@ async function deleteDepartement() {
 
                     <!-- Action Column with Row Editor -->
                     <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:right"></Column>
-                    
+
                     <!-- Additional Action Buttons -->
                     <Column header="Actions" style="width: 15%; min-width: 10rem" bodyStyle="text-align:left">
                         <template #body="slotProps">
-                            <Button 
-                                icon="pi pi-trash" 
-                                outlined rounded 
-                                severity="danger" 
-                                @click="confirmDeleteDepartement(slotProps.data)" 
+                            <Button
+                                icon="pi pi-trash"
+                                outlined rounded
+                                severity="danger"
+                                @click="confirmDeleteDepartement(slotProps.data)"
                             />
                         </template>
                     </Column>

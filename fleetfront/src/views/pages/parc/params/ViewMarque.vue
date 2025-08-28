@@ -242,7 +242,7 @@ function onFileSelect(event) {
                                         class="p-button-outlined" />
                             <Image v-if="marque.imagePreview || marque.image_url"
                                  :src="marque.imagePreview || marque.image_url"
-                                 class="mt-2 rounded w-32" preview />
+                                 class="rounded m-2" preview />
                         </div>
                     </div>
 

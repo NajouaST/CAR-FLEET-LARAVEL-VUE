@@ -8,7 +8,7 @@ export const useParcStore = defineStore('parcStore', {
         }
     },
     actions: {
-        // ---------- MARQUES ----------
+        // ---------- VEHICULES ----------
         async getVehicules(params = {},toast) {
             try {
                 const queryParams = this.buildUserApiQuery(params);
@@ -29,12 +29,12 @@ export const useParcStore = defineStore('parcStore', {
 
         async createVehicule(formData, toast) {
             try {
-                 const res = await axiosInstance.post('/vehicules', formData, {
-                     headers: {
-                         Authorization: `Bearer ${localStorage.getItem('token')}`,
-                         'Content-Type': 'multipart/form-data'
-                     }
-                 });
+                const res = await axiosInstance.post('/vehicules', formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
 
                 this.errors = {};
                 return res.data;
@@ -47,11 +47,11 @@ export const useParcStore = defineStore('parcStore', {
             }
         },
 
-        async updateVehicule(marqueId, formData, toast) {
+        async updateVehicule(id, formData, toast) {
             try {
                 formData.append('_method', 'PUT'); // <-- trick Laravel into treating it as PUT
 
-                const res = await axiosInstance.post(`/vehicules/${marqueId}`, formData, {
+                const res = await axiosInstance.post(`/vehicules/${id}`, formData, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                         'Content-Type': 'multipart/form-data'
@@ -65,16 +65,16 @@ export const useParcStore = defineStore('parcStore', {
             }
         },
 
-        async getVehiculeById(marqueId, toast) {
+        async getVehiculeById(id, toast) {
             try {
-                const res = await axiosInstance.get(`/vehicules/${marqueId}`, {
+                const res = await axiosInstance.get(`/vehicules/${id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
                 return res.data;
             } catch (err) {
-                toast?.add({ severity: 'error', summary: 'Error', detail: 'Failed to load marque', life: 3000 });
+                toast?.add({ severity: 'error', summary: 'Error', detail: 'Failed to load vehicule', life: 3000 });
                 this.handleAuthorizationError(err, toast);
             }
         },
@@ -88,7 +88,78 @@ export const useParcStore = defineStore('parcStore', {
                 });
                 return res.data;
             } catch (err) {
-                toast?.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete marque', life: 3000 });
+                toast?.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete vehicule', life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        // ---------- DOC VEHICULES ----------
+        async getDocVehicules(params = {},toast) {
+            try {
+                const queryParams = this.buildUserApiQuery(params);
+
+                const res = await axiosInstance.get('/document-vehicules', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                    params: queryParams
+                });
+
+                return res.data;
+            } catch (err) {
+                toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load document vehicules', life: 3000 });
+                this.handleAuthorizationError(err,toast);
+            }
+        },
+
+        async createDocVehicule(formData, toast) {
+            try {
+                const res = await axiosInstance.post('/document-vehicules', formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                if (err.response?.status === 422) {
+                    this.errors = err.response.data.errors;
+                }
+                this.handleAuthorizationError(err, toast);
+                throw err;
+            }
+        },
+
+        async updateDocVehicule(id, formData, toast) {
+            try {
+                formData.append('_method', 'PUT'); // <-- trick Laravel into treating it as PUT
+
+                const res = await axiosInstance.post(`/document-vehicules/${id}`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                this.errors = {};
+                return res.data;
+            } catch (err) {
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async deleteDocVehicule(id, toast) {
+            try {
+                const res = await axiosInstance.delete(`/document-vehicules/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete document vehicule', life: 3000 });
                 this.handleAuthorizationError(err, toast);
             }
         },

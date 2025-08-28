@@ -9,6 +9,7 @@ use App\Http\Controllers\API\params\TypeCarburantController;
 use App\Http\Controllers\API\params\TypeCompteurController;
 use App\Http\Controllers\API\params\ZoneController;
 use App\Http\Controllers\API\parc\CarteCarburantController;
+use App\Http\Controllers\API\parc\DocumentVehiculeController;
 use App\Http\Controllers\API\parc\parcParams\GammeController;
 use App\Http\Controllers\API\parc\parcParams\MarqueController;
 use App\Http\Controllers\API\parc\parcParams\ModeleController;
@@ -81,6 +82,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     /**********************************     VEHICULE      ************************************/
     Route::apiResource('vehicules', VehiculeController::class)->middleware(PermissionMiddleware::using('vehicules access'));
     Route::get('vehicules-names', [VehiculeController::class, 'listImmatriculations']);
+
+    /**********************************     DOC VEHICULE      ************************************/
+    Route::apiResource('document-vehicules', DocumentVehiculeController::class)->middleware(PermissionMiddleware::using('vehicules access'));
 
     /**********************************     CARTE CARBURANT      ************************************/
     Route::apiResource('carte-carburants', CarteCarburantController::class)->middleware(PermissionMiddleware::using('carte-carburants access'));
