@@ -223,6 +223,19 @@ export const useParamsGenereauxStore = defineStore("paramsGenereauxStore", {
 			}
 		},
 
+        async getPersonnelById(id, toast) {
+
+            try {
+                const res = await axiosInstance.get(`/personnels/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load personnel", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
         // ---------- PERSONNEL CREATION DROPDOWN LISTS ----------
         
         async getSocietes(toast) {
@@ -341,6 +354,42 @@ export const useParamsGenereauxStore = defineStore("paramsGenereauxStore", {
                 return res.data;
             } catch (err) {
                 toast?.add({ severity: "error", summary: "Error", detail: "Failed to load centre couts", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getSuperviseurs(toast) {
+            try {
+                const res = await axiosInstance.get("/personnels-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load superviseurs", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getCarteCarburants(toast) {
+            try {
+                const res = await axiosInstance.get("/carte-carburants-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load carte carburants", life: 3000 });
+                this.handleAuthorizationError(err, toast);
+            }
+        },
+
+        async getUsers(toast) {
+            try {
+                const res = await axiosInstance.get("/users-names", {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                });
+                return res.data;
+            } catch (err) {
+                toast?.add({ severity: "error", summary: "Error", detail: "Failed to load users", life: 3000 });
                 this.handleAuthorizationError(err, toast);
             }
         },

@@ -53,8 +53,8 @@ export const useAuthStore = defineStore('authStore', {
 
         async authenticate(apiRoute, formData, toast) {
             try {
-                // console.log('d5al lel authenticate (this is a temporary workaround)');
-                // await axiosInstance.get('http://localhost:8000/sanctum/csrf-cookie');
+                console.log('d5al lel authenticate (this is a temporary workaround)');
+                await axiosInstance.get('http://localhost:8000/sanctum/csrf-cookie');
                 const res = await axiosInstance.post(`/${apiRoute}`, formData);
                 
                 if (res.data.errors) {

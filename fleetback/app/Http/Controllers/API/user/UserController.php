@@ -15,9 +15,7 @@ class UserController extends Controller
 
     public function listNames()
     {
-        $users = User::all();
-
-        return NameResource::collection($users);
+        return User::select('id','name','email')->get();
     }
 
     public function index(Request $request)

@@ -155,6 +155,7 @@ async function saveVehicule() {
             formData.append("carte_grise_back", vehicule.value.carte_grise_back);
         }
 
+        console.log(vehicule);
         await parcStore.createVehicule(formData, toast);
         toast.add({ severity: "success", summary: "Succès", detail: "Véhicule créé avec succès", life: 3000 });
         router.push({ name: "vehicules" });

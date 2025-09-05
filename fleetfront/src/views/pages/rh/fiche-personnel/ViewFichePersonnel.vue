@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useToast } from "primevue/usetoast";
 import { useParamsGenereauxStore } from "@/store/ParamsGeneraux";
 import { FilterMatchMode } from "@primevue/core/api";
+import { useRouter } from "vue-router";
 
 // Import PrimeVue components
 import Dropdown from 'primevue/dropdown';
@@ -12,6 +13,7 @@ import Checkbox from 'primevue/checkbox';
 import Textarea from 'primevue/textarea';
 
 const toast = useToast();
+const router = useRouter();
 const paramsGenereauxStore = useParamsGenereauxStore();
 
 // state
@@ -161,6 +163,7 @@ const removeFilter = (field) => {
 
 // CRUD actions
 function openNew() {
+    router.push({name: "createPersonnel"})
     personnel.value = {
         tjrs_actif: true,
         type: 'sédentaire',
@@ -264,10 +267,7 @@ async function savePersonnel() {
     }
 }
 
-function editPersonnel(p) {
-    personnel.value = { ...p };
-    personnelDialog.value = true;
-}
+
 
 function confirmDeletePersonnel(p) {
     personnel.value = p;
@@ -474,7 +474,7 @@ async function deletePersonnel() {
 
                     <Column :exportable="false" header="Action" alignFrozen="right" style="min-width: 120px" frozen>
                         <template #body="{ data }">
-                            <Button icon="pi pi-pencil" outlined rounded severity="warn" class="mr-2" @click="editPersonnel(data)" />
+                            <Button icon="pi pi-pencil" outlined rounded severity="warn" class="mr-2" @click="router.push({ name: 'editPersonnel', params: { id: data.id } })" />
                             <Button icon="pi pi-trash" outlined rounded severity="danger" class="mr-2" @click="confirmDeletePersonnel(data)" />
                         </template>
                     </Column>

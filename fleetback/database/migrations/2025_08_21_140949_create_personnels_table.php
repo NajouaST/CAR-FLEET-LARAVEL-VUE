@@ -30,10 +30,10 @@ return new class extends Migration
             $table->foreignId('centre_cout_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
 
-            $table->string('tel');
+            $table->string('tel')->nullable();
             $table->string('superviseur')->nullable();
             $table->string('titre');
-            $table->text('adresse');
+            $table->text('adresse')->nullable();
             $table->enum('type', ['sédentaire', 'force de vente']);
             $table->enum('sexe', ['h', 'f']);
 

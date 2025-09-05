@@ -37,8 +37,8 @@ class PersonnelController extends Controller
 
     public function listNames(Request $request)
     {
-        $items = Personnel::select('matriculation', 'nom', 'cin')->get();
-        return NameResource::collection($items);
+        $items = Personnel::with('user')->get();
+        return response()->json($items);
     }
 
     /**
@@ -74,6 +74,8 @@ class PersonnelController extends Controller
 		]);
 
 		$personnel = Personnel::create($validated);
+
+		\Log::info('Personnel created:', $personnel->toArray());
 
 		return response()->json($personnel, 201);
 	}

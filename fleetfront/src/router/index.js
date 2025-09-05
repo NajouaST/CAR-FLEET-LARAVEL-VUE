@@ -149,11 +149,7 @@ const router = createRouter({
                 {
                     path: 'params',
                     children: [
-                        {
-                            path: 'fiche-personnel',
-                            meta: { permission: "params access" },
-                            component: () => import('@/views/pages/rh/fiche-personnel/ViewFichePersonnel.vue'),
-                        },
+                        
                         {
                             path: 'type-carburant',
                             meta: { permission: "params access" },
@@ -181,8 +177,33 @@ const router = createRouter({
                     children: [
                         {
                             path: 'fiche-personnel',
-                            meta: { permission: "params access" },
-                            component: () => import('@/views/pages/rh/fiche-personnel/ViewFichePersonnel.vue'),
+                            meta: { permission: "personnels access" },
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'personnels',
+                                    meta: { permission: "personnels view" },
+                                    component: () => import('@/views/pages/rh/fiche-personnel/ViewFichePersonnel.vue'),
+                                },
+                                {
+                                    path: 'create',
+                                    name: 'createPersonnel',
+                                    meta: { permission: "personnels create" },
+                                    component: () => import('@/views/pages/rh/fiche-personnel/CreateFichePersonnel.vue'),
+                                },
+                                {
+                                    path: 'edit/:id',
+                                    name: 'editPersonnel',
+                                    meta: { permission: "personnels edit" },
+                                    component: () => import('@/views/pages/rh/fiche-personnel/EditFichePersonnel.vue'),
+                                },
+                                {
+                                    path: 'show/:id',
+                                    name: 'showPersonnel',
+                                    meta: { permission: "personnels view" },
+                                    component: () => import('@/views/pages/rh/fiche-personnel/ShowFichePersonnel.vue'),
+                                },
+                            ]
                         },
                         {
                             path: 'params',

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CarteCarburant;
 use App\Models\FamilleVehicule;
 use App\Models\Fournisseur;
 use App\Models\Gamme;
@@ -56,6 +57,13 @@ class ParcSeeder extends Seeder
         $kia = Marque::firstOrCreate([ 'name' => 'KIA']);
         $ford = Marque::firstOrCreate([ 'name' => 'FORD']);
         $vw = Marque::firstOrCreate([ 'name' => 'VW']);
+
+        // Carte Carburants
+        $carteCarburant1 = CarteCarburant::firstOrCreate([ 'n_carte' => '6482957501', 'plafond_caburant' => 1000, 'unite' => 'L', 'plafond_service' => 1000]);
+        $carteCarburant2 = CarteCarburant::firstOrCreate([ 'n_carte' => '6482957502', 'plafond_caburant' => 1000, 'unite' => 'L', 'plafond_service' => 1000]);
+        $carteCarburant3 = CarteCarburant::firstOrCreate([ 'n_carte' => '6482957503', 'plafond_caburant' => 1000, 'unite' => 'L', 'plafond_service' => 1000]);
+        $carteCarburant4 = CarteCarburant::firstOrCreate([ 'n_carte' => '6482957504', 'plafond_caburant' => 1000, 'unite' => 'L', 'plafond_service' => 1000]);
+        $carteCarburant5 = CarteCarburant::firstOrCreate([ 'n_carte' => '6482957505', 'plafond_caburant' => 1000, 'unite' => 'L', 'plafond_service' => 1000]);
 
         // Modèles
         $modele1 = Modele::firstOrCreate([
@@ -145,104 +153,112 @@ class ParcSeeder extends Seeder
 
         // Véhicules (4–5)
         // Véhicules
-        $vehicule1 = Vehicule::firstOrCreate([
-            'carte_grise' => 'cg_bmw_x5.pdf',
-            'immatriculation' => '125-TN-456',
-            'chassis' => 'CHASSISBMW125',
-            'dmc' => now()->subYears(2),
-            'couleur' => 'Noir',
-            'categorie' => '4x4',
-            'situation' => 'en_exploitation',   // ✅
-            'statut' => 'affectee',             // ✅
-            'formule_achat' => 'fonds propres',
-            'date' => now()->subYears(2),
-            'valeur' => 120000,
-            'loyer' => null,
-            'date_garantie' => now()->addYear(),
-            'km_garantie' => 100000,
-            'modele_id' => $modele1->id,
-            'famille_vehicule_id' => 1,
-            'fournisseur_id' => 1,
-        ]);
 
-        $vehicule2 = Vehicule::firstOrCreate([
-            'carte_grise' => 'cg_kia_picanto.pdf',
-            'immatriculation' => '784-TN-321',
-            'chassis' => 'CHASSISKIA784',
-            'dmc' => now()->subYear(),
-            'couleur' => 'Rouge',
-            'categorie' => 'Citadine',
-            'situation' => 'en_exploitation',   // ✅
-            'statut' => 'libre',                // ✅
-            'formule_achat' => 'leasing',
-            'date' => now()->subYear(),
-            'valeur' => 35000,
-            'loyer' => 700,
-            'date_garantie' => now()->addYears(2),
-            'km_garantie' => 60000,
-            'modele_id' => $modele2->id,
-            'famille_vehicule_id' => 1,
-            'fournisseur_id' => 1,
-        ]);
+        try {
 
-        $vehicule3 = Vehicule::firstOrCreate([
-            'carte_grise' => 'cg_ford_focus.pdf',
-            'immatriculation' => '454-TN-654',
-            'chassis' => 'CHASSISFORD454',
-            'dmc' => now()->subYears(3),
-            'couleur' => 'Bleu',
-            'categorie' => 'Compacte',
-            'situation' => 'en_reparation',     // ✅
-            'statut' => 'hors_service',         // ✅
-            'formule_achat' => 'fonds propres',
-            'date' => now()->subYears(3),
-            'valeur' => 70000,
-            'loyer' => null,
-            'date_garantie' => now()->subMonths(6),
-            'km_garantie' => 80000,
-            'modele_id' => $modele3->id,
-            'famille_vehicule_id' => 1,
-            'fournisseur_id' => 1,
-        ]);
-
-        $vehicule4 = Vehicule::firstOrCreate([
-            'carte_grise' => 'cg_vw_transporter.pdf',
-            'immatriculation' => '943-TN-852',
-            'chassis' => 'CHASSISVW943',
-            'dmc' => now()->subYears(4),
-            'couleur' => 'Blanc',
-            'categorie' => 'Utilitaire',
-            'situation' => 'en_exploitation',   // ✅
-            'statut' => 'affectee',             // ✅
-            'formule_achat' => 'fonds propres',
-            'date' => now()->subYears(4),
-            'valeur' => 90000,
-            'loyer' => null,
-            'date_garantie' => now()->subYear(),
-            'km_garantie' => 120000,
-            'modele_id' => $modele4->id,
-            'famille_vehicule_id' => 2,
-            'fournisseur_id' => 2,
-        ]);
-
-        $vehicule5 = Vehicule::firstOrCreate([
-            'carte_grise' => 'cg_bmw_i3.pdf',
-            'immatriculation' => '149-TN-753',
-            'chassis' => 'CHASSISBMW149',
-            'dmc' => now()->subMonths(10),
-            'couleur' => 'Gris',
-            'categorie' => 'Hybride',
-            'situation' => 'en_exploitation',   // ✅
-            'statut' => 'libre',                // ✅
-            'formule_achat' => 'leasing',
-            'date' => now()->subMonths(10),
-            'valeur' => 150000,
-            'loyer' => 1500,
-            'date_garantie' => now()->addYears(3),
-            'km_garantie' => 80000,
-            'modele_id' => $modele5->id,
-            'famille_vehicule_id' => 1,
-            'fournisseur_id' => 2,
-        ]);
+            $vehicule1 = Vehicule::firstOrCreate([
+                'carte_grise' => 'cg_bmw_x5.pdf',
+                'immatriculation' => '125-TN-456',
+                'chassis' => 'CHASSISBMW125',
+                'dmc' => now()->subYears(2),
+                'couleur' => 'Noir',
+                'categorie' => '4x4',
+                'situation' => 'en_exploitation',   // ✅
+                'statut' => 'affectee',             // ✅
+                'formule_achat' => 'fonds propres',
+                'date' => now()->subYears(2),
+                'valeur' => 120000,
+                'loyer' => null,
+                'date_garantie' => now()->addYear(),
+                'km_garantie' => 100000,
+                'modele_id' => $modele1->id,
+                'famille_vehicule_id' => 1,
+                'fournisseur_id' => 1,
+            ]);
+    
+            $vehicule2 = Vehicule::firstOrCreate([
+                'carte_grise' => 'cg_kia_picanto.pdf',
+                'immatriculation' => '784-TN-321',
+                'chassis' => 'CHASSISKIA784',
+                'dmc' => now()->subYear(),
+                'couleur' => 'Rouge',
+                'categorie' => 'Citadine',
+                'situation' => 'en_exploitation',   // ✅
+                'statut' => 'libre',                // ✅
+                'formule_achat' => 'leasing',
+                'date' => now()->subYear(),
+                'valeur' => 35000,
+                'loyer' => 700,
+                'date_garantie' => now()->addYears(2),
+                'km_garantie' => 60000,
+                'modele_id' => $modele2->id,
+                'famille_vehicule_id' => 1,
+                'fournisseur_id' => 1,
+            ]);
+    
+            $vehicule3 = Vehicule::firstOrCreate([
+                'carte_grise' => 'cg_ford_focus.pdf',
+                'immatriculation' => '454-TN-654',
+                'chassis' => 'CHASSISFORD454',
+                'dmc' => now()->subYears(3),
+                'couleur' => 'Bleu',
+                'categorie' => 'Compacte',
+                'situation' => 'en_reparation',     // ✅
+                'statut' => 'hors_service',         // ✅
+                'formule_achat' => 'fonds propres',
+                'date' => now()->subYears(3),
+                'valeur' => 70000,
+                'loyer' => null,
+                'date_garantie' => now()->subMonths(6),
+                'km_garantie' => 80000,
+                'modele_id' => $modele3->id,
+                'famille_vehicule_id' => 1,
+                'fournisseur_id' => 1,
+            ]);
+    
+            $vehicule4 = Vehicule::firstOrCreate([
+                'carte_grise' => 'cg_vw_transporter.pdf',
+                'immatriculation' => '943-TN-852',
+                'chassis' => 'CHASSISVW943',
+                'dmc' => now()->subYears(4),
+                'couleur' => 'Blanc',
+                'categorie' => 'Utilitaire',
+                'situation' => 'en_exploitation',   // ✅
+                'statut' => 'affectee',             // ✅
+                'formule_achat' => 'fonds propres',
+                'date' => now()->subYears(4),
+                'valeur' => 90000,
+                'loyer' => null,
+                'date_garantie' => now()->subYear(),
+                'km_garantie' => 120000,
+                'modele_id' => $modele4->id,
+                'famille_vehicule_id' => 2,
+                'fournisseur_id' => 2,
+            ]);
+    
+            $vehicule5 = Vehicule::firstOrCreate([
+                'carte_grise' => 'cg_bmw_i3.pdf',
+                'immatriculation' => '149-TN-753',
+                'chassis' => 'CHASSISBMW149',
+                'dmc' => now()->subMonths(10),
+                'couleur' => 'Gris',
+                'categorie' => 'Hybride',
+                'situation' => 'en_exploitation',   // ✅
+                'statut' => 'libre',                // ✅
+                'formule_achat' => 'leasing',
+                'date' => now()->subMonths(10),
+                'valeur' => 150000,
+                'loyer' => 1500,
+                'date_garantie' => now()->addYears(3),
+                'km_garantie' => 80000,
+                'modele_id' => $modele5->id,
+                'famille_vehicule_id' => 1,
+                'fournisseur_id' => 2,
+            ]);
+            
+        } catch (\Throwable $th) {
+            echo $th->getMessage();
+        }
+        
     }
 }
