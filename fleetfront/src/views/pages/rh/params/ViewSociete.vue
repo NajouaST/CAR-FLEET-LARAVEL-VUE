@@ -7,6 +7,7 @@ import { FilterMatchMode } from "@primevue/core/api";
 // Import PrimeVue components
 import Textarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
+import Image from 'primevue/image';
 
 const toast = useToast();
 const paramsGenereauxStore = useParamsGenereauxStore();
@@ -17,6 +18,7 @@ const totalRecords = ref(0);
 const loading = ref(false);
 const perPage = ref(10);
 const lazyParams = ref({});
+const logoPreview = ref(null);
 
 // dialogs
 const societeDialog = ref(false);
@@ -35,7 +37,6 @@ const filters = ref({ ...defaultFilters });
 
 onMounted(() => {
     fetchSocietes();
-	console.log(societes);
 });
 
 // fetch societes
@@ -99,6 +100,13 @@ function hideDialog() {
     submitted.value = false;
 }
 
+function handleLogoUpload(event) {
+    const file = event.files[0];
+    societe.value.logo_path = file;
+    logoPreview.value = URL.createObjectURL(file);
+    console.log("uploaded logo", societe.value.logo_path);
+}
+
 async function saveSociete() {
     submitted.value = true;
     if (!societe.value.nom?.trim()) return;
@@ -106,12 +114,12 @@ async function saveSociete() {
     try {
         const formData = new FormData();
 
-        if (societe.value.logo_path instanceof File) {
-            formData.append("logo_path", societe.value.logo_path);
-        } else if (societe.value.logo_path && typeof societe.value.logo_path === 'string') {
-            // If it's a string (existing logo path), send it as a field
-            formData.append("existing_logo_path", societe.value.logo_path);
-        }
+        formData.append("nom", societe.value.nom || "");
+        formData.append("description", societe.value.description || "");
+        formData.append("logo_path", societe.value.logo_path);
+        
+
+        
 
         console.log('Sending FormData with:');
         for (let [key, value] of formData.entries()) {
@@ -121,16 +129,13 @@ async function saveSociete() {
 
         if (societe.value.id) {
             // update existing societe
-            await paramsGenereauxStore.updateSociete(societe.value.id, {nom: societe.value.nom, description: societe.value.description}, toast);
-            if (societe.value.logo_path) {
-                await paramsGenereauxStore.updateSociete(societe.value.id, formData, toast);
-            }
+            await paramsGenereauxStore.updateSociete(societe.value.id, formData, toast);
+            
 
             toast.add({ severity: "success", summary: "Updated", detail: "Société updated", life: 3000 });
         } else {
             // create new societe
-            formData.append("nom", societe.value.nom || "");
-            formData.append("description", societe.value.description || "");
+            
 
             await paramsGenereauxStore.createSociete(formData, toast);
             toast.add({ severity: "success", summary: "Created", detail: "Société created", life: 3000 });
@@ -159,6 +164,7 @@ async function saveSociete() {
 
 function editSociete(s) {
     societe.value = { ...s };
+    logoPreview.value = null;
     societeDialog.value = true;
 }
 
@@ -174,13 +180,7 @@ async function deleteSociete() {
     fetchSocietes(lazyParams.value);
 }
 
-// File handling
-const onLogoSelect = (event) => {
-    const file = event.files[0];
-    if (file) {
-        societe.value.logo_path = file;
-    }
-};
+
 
 const onLogoClear = () => {
     societe.value.logo_path = null;
@@ -268,13 +268,13 @@ const onLogoClear = () => {
                     <Column field="logo_path" header="Logo" sortable style="min-width: 120px">
                         <template #body="{ data }">
                             <div v-if="data.logo_path" class="flex items-center gap-2">
-                                <img
+                                <Image
                                     :src="data.logo_path"
                                     :alt="data.nom"
-                                    class="w-10 h-10 object-cover rounded"
+                                    class="w-12 h-12 object-cover rounded"
+                                    preview
                                     @error="$event.target.style.display='none'"
                                 />
-                                <span class="text-sm text-gray-600">Logo</span>
                             </div>
                             <span v-else class="text-gray-400 text-sm">No logo</span>
                         </template>
@@ -310,7 +310,7 @@ const onLogoClear = () => {
                                 :auto="true"
                                 accept="image/*"
                                 :maxFileSize="2048000"
-                                @select="onLogoSelect"
+                                @select="handleLogoUpload"
                                 @clear="onLogoClear"
                                 chooseLabel="Choose Logo"
                                 cancelLabel="Clear"
@@ -319,15 +319,16 @@ const onLogoClear = () => {
                             <small class="text-gray-600">Max file size: 2MB. Supported formats: JPEG, PNG, JPG, GIF, SVG</small>
                         </div>
 
-                        <!-- Preview current logo if editing -->
-                        <div v-if="societe.logo_path && typeof societe.logo_path === 'string'" class="mt-4">
+                        <div v-if="logoPreview">
                             <label class="block font-medium mb-2">Current Logo</label>
-                            <img
-                                :src="societe.logo_path"
+                            <Image
+                                :src="logoPreview"
                                 :alt="societe.nom"
                                 class="w-20 h-20 object-cover rounded border"
+                                preview
                             />
                         </div>
+
                     </div>
 
                     <template #footer>

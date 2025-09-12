@@ -1,8 +1,9 @@
 <script setup>
-import { DatePicker, Select, useToast } from 'primevue';
+import { DatePicker, ProgressSpinner, Select, useToast } from 'primevue';
 import { onMounted, ref } from 'vue';
 import { useParamsGenereauxStore } from "@/store/ParamsGeneraux";
 import { useRouter, useRoute } from 'vue-router';
+import Checkbox from 'primevue/checkbox';
 
 
 const toast = useToast();
@@ -14,6 +15,7 @@ const route = useRoute();
 // state
 const personnel = ref({});
 const saving = ref(false);
+const isLoading = ref(false);
 
 // select data
 const societes = ref([]);
@@ -36,6 +38,7 @@ const errors = ref({})
 
 
 const loadSelectData = async () => {
+    isLoading.value = true;
     try {
         console.log('Loading select data...');
 
@@ -129,6 +132,8 @@ const loadSelectData = async () => {
 
     } catch (error) {
         console.error('Error loading dropdown data:', error);
+    } finally {
+        isLoading.value = false;
     }
 };
 
@@ -209,7 +214,13 @@ async function savePersonnel() {
 
 </script>
 <template>
-	<div class="card p-6">
+	<div v-if="isLoading" class="flex justify-center items-center h-80 bg-white flex-col gap-4">
+		<ProgressSpinner />
+        <p>Chargement des données...</p>
+        
+    </div>
+
+	<div v-else class="card p-6">
 		<h2 class="text-xl font-bold mb-4">Modifier un personnel</h2>
 		<form @submit.prevent="savePersonnel" class="space-y-6">
 			<div>
@@ -380,6 +391,11 @@ async function savePersonnel() {
                                     :loading="centreCouts.length === 0"
                                 />
                         </div>
+
+                        <div class="flex items-center mt-6">
+							<Checkbox v-model="personnel.tjrs_actif" class="w-full" id="tjrs_actif" binary />
+							<label for="tjrs_actif" class="block m-1">Toujours Actif</label>
+						</div>
                                                 
                         
                     </div>

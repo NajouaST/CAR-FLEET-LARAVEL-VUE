@@ -36,6 +36,7 @@ return new class extends Migration
             $table->text('adresse')->nullable();
             $table->enum('type', ['sédentaire', 'force de vente']);
             $table->enum('sexe', ['h', 'f']);
+            $table->boolean('tjrs_actif')->default(false);
 
             // permis
             $table->string('num_permis');

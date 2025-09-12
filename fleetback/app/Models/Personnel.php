@@ -36,14 +36,16 @@ class Personnel extends Model
         'sexe',
         'num_permis',
         'delivre_le',
-        'fin_validite'
+        'fin_validite',
+        'tjrs_actif',
     ];
 
 
     protected $casts = [
-        'delivre_le' => 'date',
-        'fin_validite' => 'date',
+        'delivre_le' => 'date:d/m/Y',
+        'fin_validite' => 'date:d/m/Y',
         'num_carte_carb' => 'integer',
+        'tjrs_actif' => 'boolean',
     ];
 
     // Relationships

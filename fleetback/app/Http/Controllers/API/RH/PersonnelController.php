@@ -71,6 +71,7 @@ class PersonnelController extends Controller
 			'num_permis'      => 'nullable|string|max:255',
 			'delivre_le'      => 'nullable|date',
 			'fin_validite'    => 'nullable|date',
+			'tjrs_actif'      => 'nullable|boolean',
 		]);
 
 		$personnel = Personnel::create($validated);
@@ -87,7 +88,7 @@ class PersonnelController extends Controller
 	{
 		return response()->json($personnel->load([
             'societe', 'direction', 'fonction', 'region', 'zone', 'site',
-            'departement', 'grade', 'division', 'centreCout'
+            'departement', 'grade', 'division', 'centreCout', 'user', 'carteCarburant'
         ]));
 	}
 
@@ -121,13 +122,14 @@ class PersonnelController extends Controller
 			'num_permis'      => 'sometimes|nullable|string|max:255',
 			'delivre_le'      => 'sometimes|nullable|date',
 			'fin_validite'    => 'sometimes|nullable|date',
+			'tjrs_actif'      => 'sometimes|nullable|boolean',
 		]);
 
 		$personnel->update($validated);
 
 		return response()->json($personnel->load([
             'societe', 'direction', 'fonction', 'region', 'zone', 'site',
-            'departement', 'grade', 'division', 'centreCout'
+            'departement', 'grade', 'division', 'centreCout', 'user', 'carteCarburant'
         ]));
 	}
 

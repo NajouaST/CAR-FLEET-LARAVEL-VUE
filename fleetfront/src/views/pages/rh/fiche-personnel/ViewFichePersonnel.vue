@@ -31,19 +31,6 @@ const deletePersonnelDialog = ref(false);
 const personnel = ref({});
 const submitted = ref(false);
 
-// dropdown data
-const societes = ref([]);
-const directions = ref([]);
-const fonctions = ref([]);
-const regions = ref([]);
-const zones = ref([]);
-const sites = ref([]);
-const departements = ref([]);
-const grades = ref([]);
-const divisions = ref([]);
-const centreCouts = ref([]);
-const type = ref([{ id: 1, nom: 'sédentaire' },
-    { id: 2, nom: 'force de vente' },])
 
 // filters
 const defaultFilters = {
@@ -58,67 +45,15 @@ const filters = ref({ ...defaultFilters });
 
 onMounted(() => {
     fetchPersonnels();
-    loadDropdownData();
 });
 
-// Load dropdown data with error handling
-const loadDropdownData = async () => {
-    try {
-        console.log('Loading dropdown data...');
 
-        const [
-            societesData,
-            directionsData,
-            fonctionsData,
-            regionsData,
-            zonesData,
-            sitesData,
-            departementsData,
-            gradesData,
-            divisionsData,
-            centreCoutsData
-        ] = await Promise.all([
-            paramsGenereauxStore.getSocietes(toast).catch(() => []),
-            paramsGenereauxStore.getDirections(toast).catch(() => []),
-            paramsGenereauxStore.getFonctions(toast).catch(() => []),
-            paramsGenereauxStore.getRegions(toast).catch(() => []),
-            paramsGenereauxStore.getZones(toast).catch(() => []),
-            paramsGenereauxStore.getSites(toast).catch(() => []),
-            paramsGenereauxStore.getDepartements(toast).catch(() => []),
-            paramsGenereauxStore.getGrades(toast).catch(() => []),
-            paramsGenereauxStore.getDivisions(toast).catch(() => []),
-            paramsGenereauxStore.getCentreCouts(toast).catch(() => [])
-        ]);
-
-        console.log('Societes data:', societesData);
-        console.log('Centre Cout data:', centreCoutsData);
-        console.log('Societes ref:', societes);
-        console.log('Directions data:', directionsData);
-
-        // assign data to ref
-        societes.value = societesData;
-        directions.value = directionsData;
-        fonctions.value = fonctionsData;
-        regions.value = regionsData;
-        zones.value = zonesData;
-        sites.value = sitesData;
-        departements.value = departementsData;
-        grades.value = gradesData;
-        divisions.value = divisionsData;
-        centreCouts.value = centreCoutsData;
-
-
-    } catch (error) {
-        console.error('Error loading dropdown data:', error);
-    }
-};
 
 // fetch personnels
 const fetchPersonnels = async (params = {}) => {
     loading.value = true;
     try {
         const data = await paramsGenereauxStore.getPersonnels(params, toast);
-        console.log(data);
         personnels.value = data?.data ?? [];
         totalRecords.value = data?.totalRecords ?? 0;
     } finally {
@@ -164,110 +99,8 @@ const removeFilter = (field) => {
 // CRUD actions
 function openNew() {
     router.push({name: "createPersonnel"})
-    personnel.value = {
-        tjrs_actif: true,
-        type: 'sédentaire',
-        sexe: 'h',
-        societe_id: 1,
-        direction_id: 1,
-        fonction_id: 1,
-        region_id: 1,
-        zone_id: 1,
-        site_id: 1,
-        departement_id: 1,
-        grade_id: 1,
-        division_id: 1,
-        centre_cout_id: 1,
-
-    };
-    submitted.value = false;
-    personnelDialog.value = true;
+    
 }
-
-function hideDialog() {
-    personnelDialog.value = false;
-    submitted.value = false;
-}
-
-async function savePersonnel() {
-    submitted.value = true;
-    if (!personnel.value.nom?.trim()) return;
-
-    try {
-        const formData = new FormData();
-
-        // Basic information
-        formData.append("matriculation", personnel.value.matriculation || "");
-        formData.append("nom", personnel.value.nom || "");
-        formData.append("cin", personnel.value.cin || "");
-        formData.append("email", personnel.value.email || "");
-        formData.append("tel", personnel.value.tel || "");
-        formData.append("titre", personnel.value.titre || "");
-        formData.append("adresse", personnel.value.adresse || "");
-        formData.append("type", personnel.value.type || "");
-        formData.append("sexe", personnel.value.sexe || "");
-        formData.append("superviseur", personnel.value.superviseur || "");
-        formData.append("num_permis", personnel.value.num_permis || "");
-        formData.append("num_carte_carb", personnel.value.num_carte_carb || "");
-        if (personnel.value.delivre_le) {
-            const delivreDate = new Date(personnel.value.delivre_le);
-            formData.append("delivre_le", delivreDate.toISOString().split('T')[0]);
-        }
-
-        if (personnel.value.fin_validite) {
-            const finValiditeDate = new Date(personnel.value.fin_validite);
-            formData.append("fin_validite", finValiditeDate.toISOString().split('T')[0]);
-        }
-        formData.append("tjrs_actif", personnel.value.tjrs_actif ? "1" : "0");
-
-
-        // Foreign keys
-        if (personnel.value.societe_id) formData.append("societe_id", personnel.value.societe_id);
-        if (personnel.value.direction_id) formData.append("direction_id", personnel.value.direction_id);
-        if (personnel.value.fonction_id) formData.append("fonction_id", personnel.value.fonction_id);
-        if (personnel.value.region_id) formData.append("region_id", personnel.value.region_id);
-        if (personnel.value.zone_id) formData.append("zone_id", personnel.value.zone_id);
-        if (personnel.value.site_id) formData.append("site_id", personnel.value.site_id);
-        if (personnel.value.departement_id) formData.append("departement_id", personnel.value.departement_id);
-        if (personnel.value.grade_id) formData.append("grade_id", personnel.value.grade_id);
-        if (personnel.value.division_id) formData.append("division_id", personnel.value.division_id);
-        if (personnel.value.centre_cout_id) formData.append("centre_cout_id", personnel.value.centre_cout_id);
-
-        // log personnel
-        console.log('personnel:', personnel.value);
-
-        if (personnel.value.id) {
-            await paramsGenereauxStore.updatePersonnel(personnel.value.id, formData, toast);
-            toast.add({ severity: "success", summary: "Updated", detail: "Personnel updated", life: 3000 });
-        } else {
-            await paramsGenereauxStore.createPersonnel(formData, toast);
-            toast.add({ severity: "success", summary: "Created", detail: "Personnel created", life: 3000 });
-        }
-
-        personnelDialog.value = false;
-        fetchPersonnels(lazyParams.value);
-    } catch (err) {
-        console.error('Error saving personnel:', err);
-        // ADD THIS TO SEE VALIDATION ERRORS
-        if (err.response?.status === 422) {
-            console.error('Validation errors:', err.response.data.errors);
-            // Show validation errors to user
-            const errors = err.response.data.errors;
-            for (const [field, messages] of Object.entries(errors)) {
-                toast.add({
-                    severity: "error",
-                    summary: "Validation Error",
-                    detail: `${field}: ${messages.join(', ')}`,
-                    life: 5000
-                });
-            }
-        } else {
-            toast.add({ severity: "error", summary: "Error", detail: "Error saving personnel", life: 3000 });
-        }
-    }
-}
-
-
 
 function confirmDeletePersonnel(p) {
     personnel.value = p;
@@ -472,8 +305,9 @@ async function deletePersonnel() {
                         </template>
                     </Column>
 
-                    <Column :exportable="false" header="Action" alignFrozen="right" style="min-width: 120px" frozen>
+                    <Column :exportable="false" header="Action" alignFrozen="right" style="min-width: 12rem" frozen>
                         <template #body="{ data }">
+                            <Button icon="pi pi-eye" outlined rounded class="mr-2" @click="router.push({ name: 'showPersonnel', params: { id: data.id } })" />
                             <Button icon="pi pi-pencil" outlined rounded severity="warn" class="mr-2" @click="router.push({ name: 'editPersonnel', params: { id: data.id } })" />
                             <Button icon="pi pi-trash" outlined rounded severity="danger" class="mr-2" @click="confirmDeletePersonnel(data)" />
                         </template>
@@ -483,259 +317,14 @@ async function deletePersonnel() {
                 <!-- Comprehensive Create/Edit Dialog -->
                 <Dialog v-model:visible="personnelDialog" :style="{ width: '90vw', maxWidth: '1200px' }" header="Personnel Details" modal>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Basic Information -->
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">Informations de Base</h3>
+                        
 
-                            <div>
-                                <label for="matriculation" class="block font-medium mb-2">Matriculation *</label>
-                                <InputText id="matriculation" v-model="personnel.matriculation" required :invalid="submitted && !personnel.matriculation" class="w-full" />
-                                <small v-if="submitted && !personnel.matriculation" class="text-red-500">Matriculation is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="nom" class="block font-medium mb-2">Nom *</label>
-                                <InputText id="nom" v-model.trim="personnel.nom" required :invalid="submitted && !personnel.nom" class="w-full" />
-                                <small v-if="submitted && !personnel.nom" class="text-red-500">Nom is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="cin" class="block font-medium mb-2">CIN *</label>
-                                <InputText id="cin" v-model="personnel.cin" required :invalid="submitted && !personnel.cin" class="w-full" />
-                                <small v-if="submitted && !personnel.cin" class="text-red-500">CIN is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="email" class="block font-medium mb-2">Email *</label>
-                                <InputText id="email" v-model="personnel.email" required :invalid="submitted && !personnel.email" type="email" class="w-full" />
-                                <small v-if="submitted && !personnel.email" class="text-red-500">Email is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="tel" class="block font-medium mb-2">Téléphone *</label>
-                                <InputText id="tel" v-model="personnel.tel" required :invalid="submitted && !personnel.tel" class="w-full" />
-                                <small v-if="submitted && !personnel.tel" class="text-red-500">Téléphone is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="titre" class="block font-medium mb-2">Titre *</label>
-                                <InputText id="titre" v-model="personnel.titre" required :invalid="submitted && !personnel.titre" class="w-full" />
-                                <small v-if="submitted && !personnel.titre" class="text-red-500">Titre is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="adresse" class="block font-medium mb-2">Adresse *</label>
-                                <Textarea id="adresse" v-model="personnel.adresse" required :invalid="submitted && !personnel.adresse" rows="3" class="w-full" />
-                                <small v-if="submitted && !personnel.adresse" class="text-red-500">Adresse is required.</small>
-                            </div>
-                        </div>
-
-                        <!-- Organizational Information -->
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">Informations Organisationnelles</h3>
-
-                            <div>
-                                <label for="societe_id" class="block font-medium mb-2">Société</label>
-                                <Dropdown
-                                    id="societe_id"
-                                    v-model="personnel.societe_id"
-                                    :options="societes"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner une société"
-                                    class="w-full"
-                                    :loading="societes.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="direction_id" class="block font-medium mb-2">Direction</label>
-                                <Dropdown
-                                    id="direction_id"
-                                    v-model="personnel.direction_id"
-                                    :options="directions"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner une direction"
-                                    class="w-full"
-                                    :loading="directions.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="fonction_id" class="block font-medium mb-2">Fonction</label>
-                                <Dropdown
-                                    id="fonction_id"
-                                    v-model="personnel.fonction_id"
-                                    :options="fonctions"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner une fonction"
-                                    class="w-full"
-                                    :loading="fonctions.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="grade_id" class="block font-medium mb-2">Grade</label>
-                                <Dropdown
-                                    id="grade_id"
-                                    v-model="personnel.grade_id"
-                                    :options="grades"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner un grade"
-                                    class="w-full"
-                                    :loading="grades.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="departement_id" class="block font-medium mb-2">Département</label>
-                                <Dropdown
-                                    id="departement_id"
-                                    v-model="personnel.departement_id"
-                                    :options="departements"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner un département"
-                                    class="w-full"
-                                    :loading="departements.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="division_id" class="block font-medium mb-2">Division</label>
-                                <Dropdown
-                                    id="division_id"
-                                    v-model="personnel.division_id"
-                                    :options="divisions"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner une division"
-                                    class="w-full"
-                                    :loading="divisions.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="centre_cout_id" class="block font-medium mb-2">Centre de Coût</label>
-                                <Dropdown
-                                    id="centre_cout_id"
-                                    v-model="personnel.centre_cout_id"
-                                    :options="centreCouts"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner un centre de coût"
-                                    class="w-full"
-                                    :loading="centreCouts.length === 0"
-                                />
-                            </div>
-                        </div>
+                        
 
                         <!-- Location and Additional Information -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">Localisation et Informations Supplémentaires</h3>
 
-                            <div>
-                                <label for="region_id" class="block font-medium mb-2">Région</label>
-                                <Dropdown
-                                    id="region_id"
-                                    v-model="personnel.region_id"
-                                    :options="regions"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner une région"
-                                    class="w-full"
-                                    :loading="regions.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="zone_id" class="block font-medium mb-2">Zone</label>
-                                <Dropdown
-                                    id="zone_id"
-                                    v-model="personnel.zone_id"
-                                    :options="zones"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner une zone"
-                                    class="w-full"
-                                    :loading="zones.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="site_id" class="block font-medium mb-2">Site</label>
-                                <Dropdown
-                                    id="site_id"
-                                    v-model="personnel.site_id"
-                                    :options="sites"
-                                    optionLabel="nom"
-                                    optionValue="id"
-                                    placeholder="Sélectionner un site"
-                                    class="w-full"
-                                    :loading="sites.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="type" class="block font-medium mb-2">Type</label>
-                                <Dropdown
-                                    id="type"
-                                    v-model="personnel.type"
-                                    :options="type"
-                                    optionLabel="nom"
-                                    optionValue="nom"
-                                    placeholder="Sélectionner le type"
-                                    class="w-full"
-                                    :loading="type.length === 0"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="sexe" class="block font-medium mb-2">Sexe</label>
-                                <Dropdown
-                                    id="sexe"
-                                    v-model="personnel.sexe"
-                                    :options="[
-                                        { label: 'Masculin', value: 'h' },
-                                        { label: 'Féminin', value: 'f' }
-                                    ]"
-                                    optionLabel="label"
-                                    optionValue="value"
-                                    placeholder="Sélectionner le sexe"
-                                    class="w-full"
-                                />
-                            </div>
-
-                            <div>
-                                <label for="superviseur" class="block font-medium mb-2">Superviseur</label>
-                                <InputText id="superviseur" v-model="personnel.superviseur" class="w-full" />
-                            </div>
-
-                            <div>
-                                <label for="num_permis" class="block font-medium mb-2">N° Permis *</label>
-                                <InputText id="num_permis" v-model="personnel.num_permis" required :invalid="submitted && !personnel.num_permis" class="w-full" />
-                                <small v-if="submitted && !personnel.num_permis" class="text-red-500">N° Permis is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="num_carte_carb" class="block font-medium mb-2">N° Carte Carburant</label>
-                                <InputNumber id="num_carte_carb" v-model="personnel.num_carte_carb" class="w-full" />
-                            </div>
-
-                            <div>
-                                <label for="delivre_le" class="block font-medium mb-2">Délivré le *</label>
-                                <Calendar id="delivre_le" v-model="personnel.delivre_le" required :invalid="submitted && !personnel.delivre_le" dateFormat="dd/mm/yy" class="w-full" />
-                                <small v-if="submitted && !personnel.delivre_le" class="text-red-500">Délivré le is required.</small>
-                            </div>
-
-                            <div>
-                                <label for="fin_validite" class="block font-medium mb-2">Fin de Validité *</label>
-                                <Calendar id="fin_validite" v-model="personnel.fin_validite" required :invalid="submitted && !personnel.fin_validite" dateFormat="dd/mm/yy" class="w-full" />
-                                <small v-if="submitted && !personnel.fin_validite" class="text-red-500">Fin de Validité is required.</small>
-                            </div>
 
                             <div class="flex items-center">
                                 <Checkbox id="tjrs_actif" v-model="personnel.tjrs_actif" :binary="true" />
@@ -743,11 +332,6 @@ async function deletePersonnel() {
                             </div>
                         </div>
                     </div>
-
-                    <template #footer>
-                        <Button label="Cancel" icon="pi pi-times" text @click="hideDialog" />
-                        <Button label="Save" icon="pi pi-check" @click="savePersonnel" />
-                    </template>
                 </Dialog>
 
                 <!-- Delete Dialog -->

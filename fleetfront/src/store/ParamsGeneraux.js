@@ -624,25 +624,17 @@ export const useParamsGenereauxStore = defineStore("paramsGenereauxStore", {
             }
         },
 
-        async updateSociete(id, data, toast) {
+        async updateSociete(id, formData, toast) {
             try {
 
+                formData.append('_method', 'PUT');
                 let headers = { 
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    
                 };
+
                 
-                let requestData = data;
-                
-                // Check if it's FormData or regular object
-                if (data instanceof FormData) {
-                    headers['Content-Type'] = 'multipart/form-data';
-                    console.log('Store: Sending as FormData');
-                } else {
-                    headers['Content-Type'] = 'application/json';
-                    console.log('Store: Sending as JSON');
-                }
-                
-                const res = await axiosInstance.put(`/societes/${id}`, requestData, { headers });
+                const res = await axiosInstance.post(`/societes/${id}`, formData, { headers });
                 
                 console.log('Store: Update response from backend:', res.data);
                 this.errors = {};

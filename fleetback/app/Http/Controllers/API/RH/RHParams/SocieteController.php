@@ -54,13 +54,18 @@ class SocieteController extends Controller
     public function update(Request $request, Societe $societe)
     {
         \Log::info("Incoming request data (update):", $request->all());
-        \Log::info("Incoming files (update):", $request->file());
+        if($request->hasFile('logo_path')) {
+            \Log::info("Incoming files (update):", $request->file());
+        }
+        else {
+            \Log::info("No files in request (update)");
+        }
 
         $validated = $request->validate([
             'nom' => 'sometimes|string|max:255',
             'description' => 'sometimes|string|max:255',
-            'logo_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'existing_logo_path' => 'sometimes|string',
+            'logo_path' => 'nullable',
+            
         ]);
 
         \Log::info('Validated data:', $validated);
